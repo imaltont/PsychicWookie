@@ -1,4 +1,5 @@
-package test;
+package no.ntnu.fellesprosjekt;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -6,8 +7,11 @@ package test;
  * Date: 27.02.14
  * Time: 16:53
  * To change this template use File | Settings | File Templates.
+ * 
+ * Edited by Johan for the lulz
  */
-public class test
+
+public class Main
 {
     public static void main (String [] args)
     {
