@@ -58,7 +58,7 @@ public class DatabaseHandler
 
     public void addUser ()
     {
-        //somthine code-ish
+        //somthing code-ish
     }
 
     public void addAlarm ()
@@ -84,7 +84,7 @@ public class DatabaseHandler
 
     public Appointment getAppointment ()
     {
-        //"thise sometime"
+        //"this sometime"
         return null;
     }
 
@@ -96,8 +96,16 @@ public class DatabaseHandler
 
     public Alarm getAlarm ()
     {
-        //RINGRINGRINGRINGRING
+        //!RINGRINGRINGRINGRING!!!
         return null;
     }
+
+    public Group getGroup ()
+    {
+        //Integer 1 <= person.
+        return null;
+    }
+
+
 }
 
