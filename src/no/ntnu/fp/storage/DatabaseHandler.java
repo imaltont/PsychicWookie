@@ -12,11 +12,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-/*import model.Employee;
-import model.Alarm;
-import model.Appointment;
-import model.Location;
-import model.Group;         */
+
+import no.ntnu.fp.model.Employee;
+import no.ntnu.fp.model.Alarm;
+import no.ntnu.fp.model.Appointment;
+import no.ntnu.fp.model.Location;
+import no.ntnu.fp.model.Group;
 import sun.rmi.runtime.Log;
 
 
@@ -75,7 +76,7 @@ public class DatabaseHandler
         //delete "this sometime"
     }
 
-    /*public Emplyee getEmplyee ()
+    public Employee getEmployee ()
     {
         //Mr. Marsh
         return null;
@@ -97,6 +98,6 @@ public class DatabaseHandler
     {
         //RINGRINGRINGRINGRING
         return null;
-    }        */
+    }
 }
 
