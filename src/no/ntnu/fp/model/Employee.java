@@ -12,8 +12,13 @@ public class Employee {
 	private ArrayList <Alarm> alarms;
 	
 
-	
-	//Setters & getters
+//Setters & getters
+	public ArrayList<Alarm> getAlarms() {
+		return alarms;
+	}
+	public void setAlarms(ArrayList<Alarm> alarms) {
+		this.alarms = alarms;
+	}
 	public String getEmail() {
 		return email;
 	}
