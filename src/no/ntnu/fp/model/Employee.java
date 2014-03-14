@@ -9,6 +9,7 @@ public class Employee {
 	private String name;
 	private ArrayList <Appointment> myAppointments;
 	private ArrayList <Appointment> invitedAppointments;
+	private ArrayList <Alarm> alarms;
 	
 
 	
