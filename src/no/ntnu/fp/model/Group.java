@@ -7,8 +7,6 @@ public class Group {
 	private ArrayList <Employee> members;
 	private ArrayList <Appointment> invitedAppointments;
 	
-	
-	
 	public int getId() {
 		return id;
 	}
