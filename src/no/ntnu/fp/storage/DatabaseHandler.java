@@ -52,8 +52,37 @@ public class DatabaseHandler
 
     public int authenticate (String account, String password)
     {
-        //stay tuned
-         return 0;
+        PreparedStatement query = null;
+        try {
+            query = this.db.prepareStatement("SELECT id, password FROM ansatt WHERE username = ?");
+            query.setString(1, account);
+            ResultSet rs = query.executeQuery();
+
+            if (!rs.next ())
+            {
+                return -1;
+            }
+
+            String hash = encryptPassword(password);
+            if (hash.equals(rs.getString("password")))
+            {
+                return this.getEmployeeId(rs.getInt("id"));
+            }
+            return -1;
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                return -1;
+            }
+
+    }
+
+    private int getEmployeeId(int emplyeeId) {
+        return 0;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    private String encryptPassword(String password)
+    {
+        return null;  //To change body of created methods use File | Settings | File Templates.
     }
 
     public void addUser ()
