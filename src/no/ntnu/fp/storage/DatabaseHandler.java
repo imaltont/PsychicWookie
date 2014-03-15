@@ -8,6 +8,8 @@ package no.ntnu.fp.storage;
  * To change this template use File | Settings | File Templates.
  */
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,7 +56,7 @@ public class DatabaseHandler
     {
         PreparedStatement query = null;
         try {
-            query = this.db.prepareStatement("SELECT id, password FROM ansatt WHERE username = ?");
+            query = this.db.prepareStatement("SELECT id, password FROM ansatt WHERE brukernavn = ?");
             query.setString(1, account);
             ResultSet rs = query.executeQuery();
 
@@ -64,12 +66,12 @@ public class DatabaseHandler
             }
 
             String hash = encryptPassword(password);
-            if (hash.equals(rs.getString("password")))
+            if (hash.equals(rs.getString("passord")))
             {
                 return this.getEmployeeId(rs.getInt("id"));
             }
             return -1;
-            } catch (SQLException e) {
+            } catch (SQLException | NoSuchAlgorithmException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 return -1;
             }
@@ -80,15 +82,29 @@ public class DatabaseHandler
         return 0;  //To change body of created methods use File | Settings | File Templates.
     }
 
-    private String encryptPassword(String password)
+
+    public int addUser (String username, String password, String email, String name)
     {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        try {
+            int id = getNextAutoIncrement ("ansatt");
+
+            PreparedStatement query = this.db.prepareStatement("INSERT INTO ansatt (id, brukernavn, epost, passord, navn) VALUES (?,?,?,?,?)");
+
+            query.setInt(1, id);
+            query.setString(2, username);
+            query.setString(3, email);
+            query.setString(4, encryptPassword(password));
+            query.setString(5, name);
+            query.executeUpdate();
+            updateState();
+
+            return id;
+        } catch (SQLException | NoSuchAlgorithmException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return -1;
+        }
     }
 
-    public void addUser ()
-    {
-        //somthing code-ish
-    }
 
     public void addAlarm ()
     {
@@ -135,6 +151,47 @@ public class DatabaseHandler
         return null;
     }
 
+    private int getNextAutoIncrement(String table) throws SQLException
+    {
+       PreparedStatement query = this.db.prepareStatement("SHOW TABLE STATUS LIKE ?");
+       query.setString(1, table);
+        ResultSet rs = query.executeQuery();
+        rs.next();
+        return rs.getInt("Auto_increment");
+    }
 
+    private String encryptPassword(String string) throws NoSuchAlgorithmException {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte [] result = mDigest.digest (string.getBytes());
+        StringBuffer buffer = new StringBuffer ();
+        for (int i = 0; i < result.length; i++)
+        {
+            buffer.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+
+        return buffer.toString();
+
+    }
+
+    private void updateState () throws SQLException
+    {
+        int state = getState();
+
+        state += 1;
+
+        PreparedStatement query = this.db.prepareStatement("UPDATE state SET value = ?");
+        query.setInt(1, state);
+        query.executeUpdate();
+
+    }
+
+    public int getState() throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT value FROM state WHERE id = 1");
+        ResultSet rs = query.executeQuery();
+
+        rs.next();
+
+        return rs.getInt(1);
+    }
 }
 
