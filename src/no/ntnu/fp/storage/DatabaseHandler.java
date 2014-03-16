@@ -20,7 +20,6 @@ import no.ntnu.fp.model.Alarm;
 import no.ntnu.fp.model.Appointment;
 import no.ntnu.fp.model.Location;
 import no.ntnu.fp.model.Group;
-import sun.rmi.runtime.Log;
 
 
 
@@ -68,7 +67,7 @@ public class DatabaseHandler
             String hash = encryptPassword(password);
             if (hash.equals(rs.getString("passord")))
             {
-                return this.getEmployeeId(rs.getInt("id"));
+                return this.getEmployeeId(rs.getString("brukernavn"));
             }
             return -1;
             } catch (SQLException | NoSuchAlgorithmException e) {
@@ -78,8 +77,17 @@ public class DatabaseHandler
 
     }
 
-    private int getEmployeeId(int emplyeeId) {
-        return 0;  //To change body of created methods use File | Settings | File Templates.
+    private int getEmployeeId(String username) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT id FROM employee WHERE brukernavn = ?");
+
+        query.setString(1, username);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return -1;
+        }
+        return rs.getInt ("brukernavn");
     }
 
 
@@ -106,55 +114,142 @@ public class DatabaseHandler
     }
 
 
-    public void addAlarm ()
+    public int addAlarm (String message, Date time, int appointmentId)
     {
-        //something something code
+        try {
+            int id = getNextAutoIncrement ("varsel");
+
+            PreparedStatement query = this.db.prepareStatement("INSERT INTO varsel (varselid, tidspunkt, melding, avtaleid) VALUES (?,?,?,?)");
+
+            query.setInt(1, id);
+            query.setDate(2, (java.sql.Date) time);
+            query.setString(3, message);
+            query.setInt(4, appointmentId);
+            query.executeUpdate();
+            updateState();
+
+            return id;
+        } catch (SQLException  e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return -1;
+        }
     }
 
-    public void addAppointment ()
+    public int addAppointment (String place, Date starteDate, Date endDate, Date date, String description, int ownerId)
     {
-        //do this sometime
+        try {
+            int id = getNextAutoIncrement ("avtale");
+
+            PreparedStatement query = this.db.prepareStatement("INSERT INTO avtale (avtaleid, sted, starttid, sluttid, dato, beskrivelse, eierid) VALUES (?,?,?,?,?,?,?)");
+
+            query.setInt(1, id);
+            query.setString(2, place);
+            query.setDate(3, (java.sql.Date) starteDate);
+            query.setDate(4, (java.sql.Date) endDate);
+            query.setDate(5, (java.sql.Date) date);
+            query.setString(6, description);
+            query.setInt(7, ownerId);
+            query.executeUpdate();
+            updateState();
+
+            return id;
+        } catch (SQLException  e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return -1;
+        }
     }
 
-    public void deleteAppointment ()
-    {
-        //delete "this sometime"
+    public void deleteAppointment (int appointmentId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("DELETE FROM avtale WHERE appointmentId = ?");
+        query.setInt(1, appointmentId);
+        query.executeUpdate();
+        updateState();
     }
 
-    public Employee getEmployee ()
-    {
-        //Mr. Marsh
-        return null;
+    public Employee getEmployee (int id) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT brukernavn, passord, epost, navn FROM employee WHERE id = ?");
+        query.setInt(1, id);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return null;
+        }
+
+        return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
+
     }
 
-    public Appointment getAppointment ()
-    {
-        //"this sometime"
-        return null;
+    public Appointment getAppointment (int id) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT dato, starttid, sluttid, sted FROM employee WHERE avtaleid = ?");
+        query.setInt(1, id);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return null;
+        }
+
+        return new Appointment (rs.getDate("dato"), rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
     }
 
-    public Location getLocation ()
-    {
-        //there
-        return null;
+    public int getAppointmentId (int eierid) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT avtaleid FROM avtale WHERE eierid = ?");
+        query.setInt(1, eierid);
+
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return -1;
+        }
+
+        return rs.getInt("avtaleid");
     }
 
-    public Alarm getAlarm ()
-    {
-        //!RINGRINGRINGRINGRING!!!
-        return null;
+    public Location getLocation (int id) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement ("SELECT romnr, antplasser FROM sted WHERE id = ?");
+        query.setInt(1, id);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return null;
+        }
+
+        return new Location (rs.getString("romnr"), rs.getInt("antplasser"));
     }
 
-    public Group getGroup ()
-    {
-        //Integer 1 <= person.
-        return null;
+    public Alarm getAlarm (int id, int appointmentId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement ("SELECT melding, tidspunkt FROM varsel WHERE varselid = ? AND avtaleid = ?");
+        query.setInt(1, id);
+        query.setInt(2, appointmentId);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return null;
+        }
+
+        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
+    }
+
+    public Group getGroup (int id) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement ("SELECT gruppenr, epost FROM gruppe WHERE id = ?");
+        query.setInt(1, id);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return null;
+        }
+        return new Group(rs.getString("gruppenr"), rs.getString("epost"));
     }
 
     private int getNextAutoIncrement(String table) throws SQLException
     {
-       PreparedStatement query = this.db.prepareStatement("SHOW TABLE STATUS LIKE ?");
-       query.setString(1, table);
+        PreparedStatement query = this.db.prepareStatement("SHOW TABLE STATUS LIKE ?");
+        query.setString(1, table);
         ResultSet rs = query.executeQuery();
         rs.next();
         return rs.getInt("Auto_increment");
