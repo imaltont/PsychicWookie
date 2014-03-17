@@ -15,10 +15,8 @@ public class Location {
 			return false;
 		}
 		while (i<reserved.size()){
-			if(date==reserved.get(i).getDate()){
-				if(startTime.after(reserved.get(i).getStartTime()) || startTime==reserved.get(i).getStartTime() && startTime.before(reserved.get(i).getEndTime())){
+			if(startTime.after(reserved.get(i).getStartTime()) || startTime==reserved.get(i).getStartTime() && startTime.before(reserved.get(i).getEndTime())){
 					return false;
-				}
 			}
 			i++;
 			}
