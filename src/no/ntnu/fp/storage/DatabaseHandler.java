@@ -11,16 +11,7 @@ package no.ntnu.fp.storage;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Date;
-
-
-import no.ntnu.fp.model.Employee;
-import no.ntnu.fp.model.Alarm;
-import no.ntnu.fp.model.Appointment;
-import no.ntnu.fp.model.Location;
-import no.ntnu.fp.model.Group;
-
 
 
 public class DatabaseHandler
