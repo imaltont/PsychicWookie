@@ -196,7 +196,7 @@ public class DatabaseHandler
             return null;
         }
 
-        //return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
+        return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
         return null;
 
     }
@@ -212,9 +212,9 @@ public class DatabaseHandler
         }
         if (rs.getString("c_sted") != null)
         {
-            //return new Appointment (rs.getDate("dato"), rs.getTime("starttid"), rs.getTime("sluttid"), rs.getString("c_sted"));
+            return new Appointment (rs.getDate("dato"), rs.getTime("starttid"), rs.getTime("sluttid"), rs.getString("c_sted"));
         }
-        //return new Appointment (rs.getDate("dato"), rs.getTime("starttid"), rs.getTime("sluttid"), rs.getString("sted"));
+        return new Appointment (rs.getDate("dato"), rs.getTime("starttid"), rs.getTime("sluttid"), rs.getString("sted"));
         return null;
     }
 
@@ -256,7 +256,7 @@ public class DatabaseHandler
             return null;
         }
 
-        //return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
+        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
         return null;
     }
 
@@ -269,7 +269,7 @@ public class DatabaseHandler
         {
             return null;
         }
-        //return new Group(rs.getString("gruppenr"), rs.getString("epost"));
+        return new Group(rs.getString("gruppenr"), rs.getString("epost"));
         return null;
     }
 
