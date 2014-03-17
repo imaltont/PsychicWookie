@@ -31,7 +31,7 @@ public class DatabaseHandler
     {
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            this.db  = DriverManager.getConnection(DatabaseSettings.db_url);
+            this.db  = DriverManager.getConnection(DatabaseSettings.db_url, DatabaseSettings.db_username, DatabaseSettings.db_pw);
             System.out.print ("Database connection established");
         }
 
@@ -104,7 +104,6 @@ public class DatabaseHandler
             query.setString(4, encryptPassword(password));
             query.setString(5, name);
             query.executeUpdate();
-            updateState();
 
             return id;
         } catch (SQLException | NoSuchAlgorithmException e) {
@@ -126,7 +125,6 @@ public class DatabaseHandler
             query.setString(3, message);
             query.setInt(4, appointmentId);
             query.executeUpdate();
-            updateState();
 
             return id;
         } catch (SQLException  e) {
@@ -150,7 +148,6 @@ public class DatabaseHandler
             query.setString(6, description);
             query.setInt(7, ownerId);
             query.executeUpdate();
-            updateState();
 
             return id;
         } catch (SQLException  e) {
@@ -163,7 +160,6 @@ public class DatabaseHandler
         PreparedStatement query = this.db.prepareStatement("DELETE FROM avtale WHERE appointmentId = ?");
         query.setInt(1, appointmentId);
         query.executeUpdate();
-        updateState();
     }
 
     public Employee getEmployee (int id) throws SQLException {
@@ -176,7 +172,8 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
+        //return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
+        return null;
 
     }
 
@@ -190,7 +187,8 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Appointment (rs.getDate("dato"), rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
+        //return new Appointment (rs.getDate("dato"), rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
+        return null;
     }
 
     public int getAppointmentId (int eierid) throws SQLException {
@@ -231,7 +229,8 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
+        //return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
+        return null;
     }
 
     public Group getGroup (int id) throws SQLException {
@@ -243,7 +242,8 @@ public class DatabaseHandler
         {
             return null;
         }
-        return new Group(rs.getString("gruppenr"), rs.getString("epost"));
+        //return new Group(rs.getString("gruppenr"), rs.getString("epost"));
+        return null;
     }
 
     private int getNextAutoIncrement(String table) throws SQLException
@@ -266,27 +266,6 @@ public class DatabaseHandler
 
         return buffer.toString();
 
-    }
-
-    private void updateState () throws SQLException
-    {
-        int state = getState();
-
-        state += 1;
-
-        PreparedStatement query = this.db.prepareStatement("UPDATE state SET value = ?");
-        query.setInt(1, state);
-        query.executeUpdate();
-
-    }
-
-    public int getState() throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT value FROM state WHERE id = 1");
-        ResultSet rs = query.executeQuery();
-
-        rs.next();
-
-        return rs.getInt(1);
     }
 }
 
