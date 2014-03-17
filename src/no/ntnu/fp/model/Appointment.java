@@ -12,21 +12,17 @@ public class Appointment {
 	private Time startTime;
 	private Time endTime;
 	private String location;
-	private Location location2;
 	private ArrayList <Employee> participants;
 	private String message;
 	private Employee owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date d, Time sT, Time eT, String l,ArrayList <Employee> p, String m, Employee o){
+	public Appointment(Date d, Time sT, Time eT, String l){
 		participants = new ArrayList <Employee>();
 		date=d;
 		startTime = sT;
 		endTime = eT;
 		location = l;
-		participants = p;
-		message = m;
-		owner = o;
 	}
 	//Logic
 	public void removeParticipant(Employee employee){

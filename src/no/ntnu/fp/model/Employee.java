@@ -12,6 +12,13 @@ public class Employee {
 	private ArrayList <Alarm> alarms;
 	
 
+	public Employee(String u, String p, String e, String n){
+		username=u;
+		password=p;
+		email=e;
+		name=n;
+		
+	}
 //Setters & getters
 	public ArrayList<Alarm> getAlarms() {
 		return alarms;

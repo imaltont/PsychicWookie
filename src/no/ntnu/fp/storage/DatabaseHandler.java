@@ -172,8 +172,8 @@ public class DatabaseHandler
             return null;
         }
 
-        //return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
-        return null;
+        return new Employee (rs.getString("brukernavn"), rs.getString("passord"), rs.getString("epost"), rs.getString("navn"));
+
 
     }
 
@@ -242,8 +242,7 @@ public class DatabaseHandler
         {
             return null;
         }
-        //return new Group(rs.getString("gruppenr"), rs.getString("epost"));
-        return null;
+        return new Group(rs.getString("gruppenr"), rs.getString("epost"));
     }
 
     private int getNextAutoIncrement(String table) throws SQLException

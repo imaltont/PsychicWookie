@@ -3,16 +3,28 @@ package no.ntnu.fp.model;
 import java.util.ArrayList;
 
 public class Group {
-	private int id;
+	private String id;
 	private ArrayList <Employee> members;
 	private ArrayList <Appointment> invitedAppointments;
 	
+	public Group(String id, String email){
+		this.id=id;
+		this.email=email;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	private String email;
 	
 	
-	public int getId() {
+	
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public ArrayList<Employee> getMembers() {
