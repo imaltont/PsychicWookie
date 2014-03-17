@@ -10,7 +10,7 @@ public class Alarm {
 	private Time time;
 	private Date date;
 	
-	public Alarm(ArrayList <Employee> p, String m, Date d, Time t){
+	public Alarm(String m, Date d, Time t){
 		message=m;
 		time=t;
 		date=d;
