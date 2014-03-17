@@ -187,8 +187,7 @@ public class DatabaseHandler
             return null;
         }
 
-        //return new Appointment (rs.getDate("dato"), rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
-        return null;
+        return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
     }
 
     public int getAppointmentId (int eierid) throws SQLException {
@@ -229,8 +228,7 @@ public class DatabaseHandler
             return null;
         }
 
-        //return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
-        return null;
+        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
     }
 
     public Group getGroup (int id) throws SQLException {

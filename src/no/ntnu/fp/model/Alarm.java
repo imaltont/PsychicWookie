@@ -7,15 +7,11 @@ import java.util.ArrayList;
 public class Alarm {
 	private int id;
 	private String message;
-	private Time time;
 	private Date date;
 	
-	public Alarm(String m, Date d, Time t){
+	public Alarm(String m, Date d){
 		message=m;
-		time=t;
 		date=d;
-		
-		
 	}
 	
 	
@@ -31,12 +27,7 @@ public class Alarm {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public Time getTime() {
-		return time;
-	}
-	public void setTime(Time time) {
-		this.time = time;
-	}
+
 	public Date getDate() {
 		return date;
 	}

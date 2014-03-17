@@ -8,18 +8,16 @@ import java.util.ArrayList;
 
 public class Appointment {
 	private int id;
-	private Date date;
-	private Time startTime;
-	private Time endTime;
+	private Date startTime;
+	private Date endTime;
 	private String location;
 	private ArrayList <Employee> participants;
 	private String message;
 	private Employee owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date d, Time sT, Time eT, String l){
+	public Appointment(Date sT, Date eT, String l){
 		participants = new ArrayList <Employee>();
-		date=d;
 		startTime = sT;
 		endTime = eT;
 		location = l;
@@ -56,28 +54,17 @@ public class Appointment {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getStartDate() {
-		return date;
-	}
-	public Date getDate() {
-		return date;
-	}
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	public void setStartDate(Date date) {
-		this.date = date;
-	}
-	public Time getStartTime() {
+
+	public Date getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Time startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
-	public Time getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Time endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	public String getLocation() {

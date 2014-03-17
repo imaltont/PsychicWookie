@@ -9,7 +9,7 @@ public class Location {
 	private String name;
 	private ArrayList <Appointment> reserved;
 	//Logic
-	public boolean isAvailable(Date date, Time startTime, Time endTime, int numberOfParticipants){
+	public boolean isAvailable(Date startTime, Date endTime, int numberOfParticipants){
 		int i=0;
 		if(numberOfParticipants>numberOfSeats){
 			return false;
