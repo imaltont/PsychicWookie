@@ -133,7 +133,7 @@ public class DatabaseHandler
         }
     }
 
-    public int addAppointment (String place, Date starteDate, Date endDate, Date date, String description, int ownerId)
+    public int addAppointment (String place, Time starteDate, Time endDate, Date date, String description, int ownerId)
     {
         try {
             int id = getNextAutoIncrement ("avtale");
@@ -142,8 +142,8 @@ public class DatabaseHandler
 
             query.setInt(1, id);
             query.setString(2, place);
-            query.setDate(3, (java.sql.Date) starteDate);
-            query.setDate(4, (java.sql.Date) endDate);
+            query.setTime(3, starteDate);
+            query.setTime(4, endDate);
             query.setDate(5, (java.sql.Date) date);
             query.setString(6, description);
             query.setInt(7, ownerId);
@@ -156,8 +156,32 @@ public class DatabaseHandler
         }
     }
 
+    public int addAppointmentCustomPlace (String place, Time starteDate, Time endDate, Date date, String description, int ownerId)
+    {
+        try {
+            int id = getNextAutoIncrement ("avtale");
+
+            PreparedStatement query = this.db.prepareStatement("INSERT INTO avtale (avtaleid, c_sted, starttid, sluttid, dato, beskrivelse, eierid) VALUES (?,?,?,?,?,?,?)");
+
+            query.setInt(1, id);
+            query.setString(2, place);
+            query.setTime(3, starteDate);
+            query.setTime(4, endDate);
+            query.setDate(5, (java.sql.Date) date);
+            query.setString(6, description);
+            query.setInt(7, ownerId);
+            query.executeUpdate();
+
+            return id;
+        } catch (SQLException  e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return -1;
+        }
+    }
+
+
     public void deleteAppointment (int appointmentId) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("DELETE FROM avtale WHERE appointmentId = ?");
+        PreparedStatement query = this.db.prepareStatement("DELETE FROM avtale WHERE avtaleId = ?");
         query.setInt(1, appointmentId);
         query.executeUpdate();
     }
@@ -178,7 +202,7 @@ public class DatabaseHandler
     }
 
     public Appointment getAppointment (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT dato, starttid, sluttid, sted FROM employee WHERE avtaleid = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT dato, starttid, sluttid, sted, c_sted FROM avtale WHERE avtaleid = ?");
         query.setInt(1, id);
         ResultSet rs = query.executeQuery();
 
@@ -186,8 +210,11 @@ public class DatabaseHandler
         {
             return null;
         }
-
-        //return new Appointment (rs.getDate("dato"), rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
+        if (rs.getString("c_sted") != null)
+        {
+            //return new Appointment (rs.getDate("dato"), rs.getTime("starttid"), rs.getTime("sluttid"), rs.getString("c_sted"));
+        }
+        //return new Appointment (rs.getDate("dato"), rs.getTime("starttid"), rs.getTime("sluttid"), rs.getString("sted"));
         return null;
     }
 
