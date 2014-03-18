@@ -173,6 +173,23 @@ public class DatabaseHandler
 
     }
 
+    public boolean answerFromUser (int employeeId, int appointmentId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT skal_komme FROM invitert_avtale WHERE ansattid = ? AND avtaleid = ?");
+        query.setInt(1, employeeId);
+        query.setInt(2, appointmentId);
+        ResultSet rs = query.executeQuery();
+
+        if (rs.getInt("skal_komme") == 0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
+
     private String getLocationName(int placeId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT romnr FROM sted WHERE id = ?");
         query.setInt(1, placeId);
