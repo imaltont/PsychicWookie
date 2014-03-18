@@ -77,7 +77,7 @@ public class DatabaseHandler
 
     }
 
-    private int getEmployeeId(String username) throws SQLException {
+    public int getEmployeeId(String username) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT id FROM employee WHERE brukernavn = ?");
 
         query.setString(1, username);
@@ -133,20 +133,19 @@ public class DatabaseHandler
         }
     }
 
-    public int addAppointment (String place, Date starteDate, Date endDate, Date date, String description, int ownerId)
+    public int addAppointment (int placeId, Date starteDate, Date endDate, String description, int ownerId)
     {
         try {
             int id = getNextAutoIncrement ("avtale");
 
-            PreparedStatement query = this.db.prepareStatement("INSERT INTO avtale (avtaleid, sted, starttid, sluttid, dato, beskrivelse, eierid) VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement query = this.db.prepareStatement("INSERT INTO avtale (avtaleid, sted, starttid, sluttid, beskrivelse, eierid) VALUES (?,?,?,?,?,?)");
 
             query.setInt(1, id);
-            query.setString(2, place);
+            query.setString(2, getLocationName(placeId));
             query.setDate(3, (java.sql.Date) starteDate);
             query.setDate(4, (java.sql.Date) endDate);
-            query.setDate(5, (java.sql.Date) date);
-            query.setString(6, description);
-            query.setInt(7, ownerId);
+            query.setString(5, description);
+            query.setInt(6, ownerId);
             query.executeUpdate();
 
             return id;
@@ -156,20 +155,33 @@ public class DatabaseHandler
         }
     }
 
+    private String getLocationName(int placeId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("SELECT romnr FROM sted WHERE id = ?");
+        query.setInt(1, placeId);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return null;
+        }
+
+        return rs.getString("romnr");
+
+    }
+
     public int addAppointmentCustomPlace (String place, Date starteDate, Date endDate, Date date, String description, int ownerId)
     {
         try {
             int id = getNextAutoIncrement ("avtale");
 
-            PreparedStatement query = this.db.prepareStatement("INSERT INTO avtale (avtaleid, c_sted, starttid, sluttid, dato, beskrivelse, eierid) VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement query = this.db.prepareStatement("INSERT INTO avtale (avtaleid, c_sted, starttid, sluttid, beskrivelse, eierid) VALUES (?,?,?,?,?,?)");
 
             query.setInt(1, id);
             query.setString(2, place);
             query.setDate(3, (java.sql.Date) starteDate);
             query.setDate(4, (java.sql.Date) endDate);
-            query.setDate(5, (java.sql.Date) date);
-            query.setString(6, description);
-            query.setInt(7, ownerId);
+            query.setString(5, description);
+            query.setInt(6, ownerId);
             query.executeUpdate();
 
             return id;
@@ -257,7 +269,7 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"));
+        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"), appointmentId);
     }
 
     public Group getGroup (int id) throws SQLException {
