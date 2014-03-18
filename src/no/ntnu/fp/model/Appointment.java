@@ -30,9 +30,9 @@ public class Appointment {
 		owner = data.getEmployee(oID); 
 		
 	}
-	public Appointment(Date sT, Date eT, String loc, String des, int oID){
+	public Appointment(Date sT, Date eT, String loc, String des, int oID) throws SQLException{
 		DatabaseHandler data = new DatabaseHandler();
-		data.addAppointmentCustomPlace(loc, sT, eT, date, des, oID)
+		data.addAppointmentCustomPlace(loc, sT, eT, des, oID);
 		participants = new ArrayList <Employee>();
 		startTime = sT;
 		endTime = eT;
