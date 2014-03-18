@@ -155,26 +155,41 @@ public class DatabaseHandler
         }
     }
 
-    public void addParticipant (int employeeId, int appointmentId)
-    {
-
+    public void removeParticipant (int employeeId, int appointmentId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("DELETE FROM invitert_avtale WHERE ansattid = ? AND avtaleid = ?");
+        query.setInt(1, employeeId);
+        query.setInt(2, appointmentId);
+        query.executeUpdate();
     }
 
-    public void removeParticipant (int employeeId, int appoientmentId)
-    {
+    public ArrayList <Integer> getParticipants (int appointmentId) throws SQLException {
+        ArrayList <Integer> id = new ArrayList<Integer>();
 
-    }
+        PreparedStatement query = this.db.prepareStatement("SELECT ansattid FROM invitert_avtale WHERE avtaleid = ? AND id = ?");
+        query.setInt(1, appointmentId);
+        ResultSet rs;
 
-    public ArrayList <Integer> getParticipants (int appoientmentId)
-    {
+        for (int i = 0; i < getNextAutoIncrement("invitert_avtale"); i++)
+        {
+            query.setInt(2, i);
+            rs = query.executeQuery();
+            if (rs.next())
+            {
+                id.add(rs.getInt("ansattid"));
+            }
+        }
 
+        return id;
     }
 
     public void inviteEmployee (int employeeId, int appointmentId) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("INSERT INTO invitert_avtale (ansattId,avtaleId) VALUES (?,?)");
+        int id = getNextAutoIncrement("invitert_avtale");
 
-        query.setInt(1, employeeId);
-        query.setInt(2, appointmentId);
+        PreparedStatement query = this.db.prepareStatement("INSERT INTO invitert_avtale (id, ansattId,avtaleId) VALUES (?,?,?)");
+
+        query.setInt(1, id);
+        query.setInt(2, employeeId);
+        query.setInt(3, appointmentId);
         query.executeUpdate();
 
     }
