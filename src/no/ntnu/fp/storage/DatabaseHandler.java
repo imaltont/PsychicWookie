@@ -214,7 +214,7 @@ public class DatabaseHandler
     }
 
     public Appointment getAppointment (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT dato, starttid, sluttid, sted, c_sted FROM avtale WHERE avtaleid = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT dato, starttid, sluttid, sted, c_sted, beskrivelse, eierid FROM avtale WHERE avtaleid = ?");
         query.setInt(1, id);
         ResultSet rs = query.executeQuery();
 
@@ -225,10 +225,10 @@ public class DatabaseHandler
 
         if (rs.getString("sted") == null)
         {
-            return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("c_sted"));
+            return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("c_sted"), rs.getString("beskrivelse"), rs.getInt("eierid"));
         }
 
-        return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"));
+        return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"), rs.getString("beskrivelse"), rs.getInt("eierid"));
     }
 
     public int getAppointmentId (int eierid) throws SQLException {
