@@ -155,6 +155,24 @@ public class DatabaseHandler
         }
     }
 
+    public void inviteEmployee (int employeeId, int appointmentId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("INSERT INTO invitert_avtale (ansattId,avtaleId) VALUES (?,?)");
+
+        query.setInt(1, employeeId);
+        query.setInt(2, appointmentId);
+        query.executeUpdate();
+
+    }
+
+    public void answerAppointment (int employeeId, int appointmentId, int answer) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("UPDATE invitert_avtale SET skal_komme = ? WHERE ansattid = ? AND avtaleid = ?");
+        query.setInt(1, answer);
+        query.setInt(2, employeeId);
+        query.setInt(3, appointmentId);
+        query.executeUpdate();
+
+    }
+
     private String getLocationName(int placeId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT romnr FROM sted WHERE id = ?");
         query.setInt(1, placeId);
@@ -169,7 +187,7 @@ public class DatabaseHandler
 
     }
 
-    public int addAppointmentCustomPlace (String place, Date starteDate, Date endDate, Date date, String description, int ownerId)
+    public int addAppointmentCustomPlace (String place, Date starteDate, Date endDate, String description, int ownerId)
     {
         try {
             int id = getNextAutoIncrement ("avtale");
