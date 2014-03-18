@@ -1,6 +1,7 @@
 package no.ntnu.fp.model;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -18,19 +19,25 @@ public class Appointment {
 	private Employee owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date sT, Date eT, String loc, String des, int oID){
+	public Appointment(Date sT, Date eT, int loc, String des, int oID) throws SQLException{
 		DatabaseHandler data = new DatabaseHandler();
-		data.addAppointment(loc, sT, eT, description, oID);
+		data.addAppointment(loc, sT, eT, des, oID);
 		participants = new ArrayList <Employee>();
 		startTime = sT;
 		endTime = eT;
-		location = loc;
+		location = data.getLocation(loc).getName();
 		description=des;
 		owner = data.getEmployee(oID); 
 		
 	}
-	public Appointment(){
-		
+	public Appointment(Date sT, Date eT, String loc, String des, int oID){
+		DatabaseHandler data = new DatabaseHandler();
+		data.addAppointmentCustomPlace(loc, sT, eT, date, des, oID)
+		participants = new ArrayList <Employee>();
+		startTime = sT;
+		endTime = eT;
+		location=loc;
+		owner = data.getEmployee(oID);
 	}
 	//Logic
 	public void removeParticipant(Employee employee){
