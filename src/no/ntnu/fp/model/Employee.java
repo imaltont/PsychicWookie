@@ -2,6 +2,8 @@ package no.ntnu.fp.model;
 
 import java.util.ArrayList;
 
+import no.ntnu.fp.storage.DatabaseHandler;
+
 public class Employee {
 	private String username;
 	private String password;
@@ -13,6 +15,8 @@ public class Employee {
 	
 
 	public Employee(String u, String p, String e, String n){
+		DatabaseHandler data = new DatabaseHandler();
+		data.addUser(u, p, e, n);
 		username=u;
 		password=p;
 		email=e;

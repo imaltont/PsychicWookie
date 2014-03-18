@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
+import no.ntnu.fp.storage.DatabaseHandler;
+
 
 
 public class Appointment {
@@ -12,15 +14,23 @@ public class Appointment {
 	private Date endTime;
 	private String location;
 	private ArrayList <Employee> participants;
-	private String message;
+	private String description;
 	private Employee owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date sT, Date eT, String l){
+	public Appointment(Date sT, Date eT, String loc, String des, int oID){
+		DatabaseHandler data = new DatabaseHandler();
+		data.addAppointment(loc, sT, eT, description, oID);
 		participants = new ArrayList <Employee>();
 		startTime = sT;
 		endTime = eT;
-		location = l;
+		location = loc;
+		description=des;
+		owner = data.getEmployee(oID); 
+		
+	}
+	public Appointment(){
+		
 	}
 	//Logic
 	public void removeParticipant(Employee employee){
@@ -36,11 +46,11 @@ public class Appointment {
 	public void setOwner(Employee owner) {
 		this.owner = owner;
 	}
-	public String getMessage() {
-		return message;
+	public String getDescription() {
+		return description;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	public ArrayList<Employee> getParticipants() {
 		return participants;

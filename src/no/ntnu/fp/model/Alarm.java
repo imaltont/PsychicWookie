@@ -4,12 +4,16 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
+import no.ntnu.fp.storage.DatabaseHandler;
+
 public class Alarm {
 	private int id;
 	private String message;
 	private Date date;
 	
-	public Alarm(String m, Date d){
+	public Alarm(String m, Date d, int appointmentId){
+		DatabaseHandler data = new DatabaseHandler();
+		data.addAlarm(m, d, appointmentId);
 		message=m;
 		date=d;
 	}
