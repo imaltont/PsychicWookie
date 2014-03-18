@@ -155,6 +155,21 @@ public class DatabaseHandler
         }
     }
 
+    public void addParticipant (int employeeId, int appointmentId)
+    {
+
+    }
+
+    public void removeParticipant (int employeeId, int appoientmentId)
+    {
+
+    }
+
+    public ArrayList <Integer> getParticipants (int appoientmentId)
+    {
+
+    }
+
     public void inviteEmployee (int employeeId, int appointmentId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("INSERT INTO invitert_avtale (ansattId,avtaleId) VALUES (?,?)");
 
@@ -173,7 +188,7 @@ public class DatabaseHandler
 
     }
 
-    public boolean answerFromUser (int employeeId, int appointmentId) throws SQLException {
+    public boolean getAnswer (int employeeId, int appointmentId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT skal_komme FROM invitert_avtale WHERE ansattid = ? AND avtaleid = ?");
         query.setInt(1, employeeId);
         query.setInt(2, appointmentId);
@@ -317,6 +332,36 @@ public class DatabaseHandler
             return null;
         }
         return new Group(rs.getString("gruppenr"), rs.getString("epost"));
+    }
+
+    public void addMember (int groupId, int employeeId) throws SQLException {
+        int id = getNextAutoIncrement("medlem_av");
+
+        PreparedStatement query = this.db.prepareStatement("INSERT INTO medlem_av (id, medlemid, gruppeid) VALUES (?,?,?)");
+        query.setInt(1, id);
+        query.setInt(2, employeeId);
+        query.setInt(3, groupId);
+        query.executeUpdate();
+    }
+
+    public ArrayList <Integer> getMemberId(int groupId) throws SQLException {
+        ArrayList <Integer> id = new ArrayList<Integer>();
+
+        PreparedStatement query = this.db.prepareStatement("SELECT medlemid FROM medlem_av WHERE gruppeid = ? AND id = ?");
+        query.setInt(1, groupId);
+        ResultSet rs;
+
+        for (int i = 0; i < getNextAutoIncrement("medlem_av"); i++)
+        {
+            query.setInt(2, i);
+            rs = query.executeQuery();
+            if (rs.next())
+            {
+                id.add(rs.getInt("medlemid"));
+            }
+        }
+
+        return id;
     }
 
     private int getNextAutoIncrement(String table) throws SQLException
