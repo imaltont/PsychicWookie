@@ -10,7 +10,10 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import no.ntnu.fp.model.Appointment;
+import no.ntnu.fp.model.Employee;
 
 /**
  *
@@ -49,6 +52,14 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         locationTextField.setText(app.getLocation());
         
         
+        ArrayList<Employee> invitedPersonList = app.getParticipants();
+        DefaultListModel<String> model = new DefaultListModel<String>();
+        for(Employee p : invitedPersonList){
+                model.addElement(p.getName());
+            }
+        personList.setModel(model);
+        
+        infoTextArea.setText(app.getMessage());
         
       
         
@@ -83,7 +94,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         personList = new javax.swing.JList();
         WhatPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        infoTextArea = new javax.swing.JTextArea();
         declineButton = new javax.swing.JButton();
         acceptButton = new javax.swing.JButton();
 
@@ -212,11 +223,11 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setName("jTextArea1"); // NOI18N
-        jScrollPane2.setViewportView(jTextArea1);
+        infoTextArea.setEditable(false);
+        infoTextArea.setColumns(20);
+        infoTextArea.setRows(5);
+        infoTextArea.setName("infoTextArea"); // NOI18N
+        jScrollPane2.setViewportView(infoTextArea);
 
         javax.swing.GroupLayout WhatPanelLayout = new javax.swing.GroupLayout(WhatPanel);
         WhatPanel.setLayout(WhatPanelLayout);
@@ -365,10 +376,10 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
     private javax.swing.JButton declineButton;
     private javax.swing.JLabel fromLabel;
     private javax.swing.JTextField fromTextField;
+    private javax.swing.JTextArea infoTextArea;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lineLabel;
     private javax.swing.JTextField locationTextField;
     private javax.swing.JList personList;
