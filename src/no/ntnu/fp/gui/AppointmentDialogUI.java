@@ -16,6 +16,7 @@ import no.ntnu.fp.model.Appointment;
 import no.ntnu.fp.model.Employee;
 
 /**
+ * 
  *
  * @author Ingrid
  */
@@ -35,10 +36,10 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
     
     
         public void setModelApp(Appointment app){
-        modelApp = app;
+        modelApp = appo;
         
-        Date startdato = app.getStartTime();
-        Date sluttdato = app.getEndTime();
+        Date startdato = appo.getStartTime();
+        Date sluttdato = appo.getEndTime();
         
         //setter datoen.
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
@@ -49,17 +50,17 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         toTextField.setText(tidFormat.format(startdato));
         fromTextField.setText(tidFormat.format(sluttdato));
         
-        locationTextField.setText(app.getLocation());
+        locationTextField.setText(appo.getLocation());
         
         
-        ArrayList<Employee> invitedPersonList = app.getParticipants();
+        ArrayList<Employee> invitedPersonList = appo.getParticipants();
         DefaultListModel<String> model = new DefaultListModel<String>();
         for(Employee p : invitedPersonList){
                 model.addElement(p.getName());
             }
         personList.setModel(model);
         
-        infoTextArea.setText(app.getMessage());
+        infoTextArea.setText(appo.getMessage());
         
       
         
