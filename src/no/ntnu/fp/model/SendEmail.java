@@ -9,19 +9,17 @@ public class SendEmail {
 	 String from;
 	 String host;
 	 String emailMessage;
-	 public SendEmail(String toEmail, String fromEmail, String emailMessage){
-		 host="localhost";
+	 public SendEmail(String toEmail, String fromEmail, String emailHeadline, String emailMessage){
+		 host="smtp.stud.ntnu.no";
 		 to=toEmail;
 		 from=fromEmail;
 		 this.emailMessage=emailMessage;
-	      // Assuming you are sending email from localhost
-	      String host = "localhost";
 
 	      // Get system properties
 	      Properties properties = System.getProperties();
 
 	      // Setup mail server
-	      properties.setProperty("mail.smtp.host", host);
+	      properties.setProperty("mail.smtp.host", "smtp.stud.ntnu.no");
 
 	      // Get the default Session object.
 	      Session session = Session.getDefaultInstance(properties);
@@ -38,10 +36,10 @@ public class SendEmail {
 	                                  new InternetAddress(to));
 
 	         // Set Subject: header field
-	         message.setSubject("This is the Subject Line!");
+	         message.setSubject(emailHeadline);
 
 	         // Now set the actual message
-	         message.setText("This is actual message");
+	         message.setText(emailMessage);
 
 	         // Send message
 	         Transport.send(message);
@@ -51,7 +49,7 @@ public class SendEmail {
 	      }
 	 }
 	 public static void main(String [] args) {
-		 SendEmail email = new SendEmail("sondre.padoey@live.com", "sondre.padoey@live.com", "Mailen fungerer");
+		 SendEmail email = new SendEmail("sondre.padoey@live.com", "sondre.padoey@live.com","Møte", "Mailen fungerer");
 		 
 	 }
 }

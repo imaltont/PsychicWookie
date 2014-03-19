@@ -6,7 +6,11 @@
 
 package no.ntnu.fp.gui;
 
+import no.ntnu.fp.storage.DatabaseHandler;
+
+import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
  *
@@ -17,7 +21,13 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     /**
      * Creates new form MakeAppointmentUI2
      */
-    public MakeAppointmentUI() {
+    private static int userID;
+    private static DatabaseHandler data;
+    private DefaultListModel invitedListModel;
+
+    public MakeAppointmentUI(int userID, DatabaseHandler data) {
+        this.data = data;
+        this.userID = userID;
         initComponents();
     }
 
@@ -29,7 +39,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        invitedListModel = new DefaultListModel();
         jPanel1 = new javax.swing.JPanel();
         WhenPanel = new javax.swing.JPanel();
         dateChooserCombo = new datechooser.beans.DateChooserCombo();
@@ -52,7 +62,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         WhomPanel = new javax.swing.JPanel();
         addPersonButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        personList = new javax.swing.JList();
+        personList = new javax.swing.JList(invitedListModel);
         WhatPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -136,28 +146,28 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         WhenPanelLayout.setVerticalGroup(
             WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(WhenPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(WhenPanelLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(DateLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(okButton)
-                            .addComponent(dateChooserCombo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(WhenPanelLayout.createSequentialGroup()
-                        .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(toLabel)
-                            .addComponent(fromLabel)
-                            .addComponent(durationLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lineLabel)
-                            .addComponent(slashLabel)
-                            .addComponent(durationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addContainerGap()
+                    .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(WhenPanelLayout.createSequentialGroup()
+                                    .addGap(3, 3, 3)
+                                    .addComponent(DateLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(okButton)
+                                            .addComponent(dateChooserCombo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(WhenPanelLayout.createSequentialGroup()
+                                    .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(toLabel)
+                                            .addComponent(fromLabel)
+                                            .addComponent(durationLabel))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(WhenPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(lineLabel)
+                                            .addComponent(slashLabel)
+                                            .addComponent(durationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addContainerGap(24, Short.MAX_VALUE))
         );
 
         WherePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Hvor:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 14))); // NOI18N
@@ -285,24 +295,24 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(WhenPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(WherePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(WhomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addContainerGap()
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(WhenPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(SaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(33, 33, 33))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(WhatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
+                                    .addComponent(WherePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(WhomPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(CancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(18, 18, 18)
+                                                    .addComponent(SaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(33, 33, 33))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                    .addComponent(WhatPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,10 +362,18 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
             MakeAppointmentUI.this.writePlaceTextFieldActionPerformed(evt);
         }
         else if (evt.getSource() == addPersonButton) {
-            MakeAppointmentUI.this.addPersonButtonActionPerformed(evt);
+            try {
+                MakeAppointmentUI.this.addPersonButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == CancelButton) {
-            MakeAppointmentUI.this.CancelButtonActionPerformed(evt);
+            try {
+                MakeAppointmentUI.this.CancelButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -363,12 +381,12 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         // TODO add your handling code here:
     }//GEN-LAST:event_writePlaceTextFieldActionPerformed
 
-    private void addPersonButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPersonButtonActionPerformed
-        new AddEmployeeDialogUI(this, false).setVisible(true);
+    private void addPersonButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_addPersonButtonActionPerformed
+        new AddEmployeeDialogUI(this, false, data, this).setVisible(true);
     }//GEN-LAST:event_addPersonButtonActionPerformed
 
-    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
-        new HomeUI().setVisible(true);
+    private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_CancelButtonActionPerformed
+        new HomeUI(userID, data).setVisible(true);
         dispose();
         
     }//GEN-LAST:event_CancelButtonActionPerformed
@@ -403,7 +421,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MakeAppointmentUI().setVisible(true);
+                new MakeAppointmentUI(userID, data).setVisible(true);
             }
         });
     }
@@ -437,5 +455,16 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     private javax.swing.JTextField toTextField;
     private javax.swing.JLabel writePlaceLabel;
     private javax.swing.JTextField writePlaceTextField;
+
+    public DefaultListModel getInvitedListModel() {
+        return invitedListModel;
+    }
+
+    public void setInvitedListModel(DefaultListModel invitedListModel) {
+        for (int i = 0; i < invitedListModel.size(); i++)
+        {
+            this.invitedListModel.addElement(invitedListModel.elementAt(i));
+        }
+    }
     // End of variables declaration//GEN-END:variables
 }

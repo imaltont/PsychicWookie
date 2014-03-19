@@ -8,18 +8,13 @@ package no.ntnu.fp.storage;
  * To change this template use File | Settings | File Templates.
  */
 
+import no.ntnu.fp.model.*;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
-
-
-import no.ntnu.fp.model.Employee;
-import no.ntnu.fp.model.Alarm;
-import no.ntnu.fp.model.Appointment;
-import no.ntnu.fp.model.Location;
-import no.ntnu.fp.model.Group;
 
 
 
@@ -53,9 +48,9 @@ public class DatabaseHandler
 
     public int authenticate (String account, String password)
     {
-        PreparedStatement query = null;
+
         try {
-            query = this.db.prepareStatement("SELECT id, password FROM ansatt WHERE brukernavn = ?");
+            PreparedStatement query = this.db.prepareStatement("SELECT id, passord FROM ansatt WHERE brukernavn = ?");
             query.setString(1, account);
             ResultSet rs = query.executeQuery();
 
@@ -67,8 +62,9 @@ public class DatabaseHandler
             String hash = encryptPassword(password);
             if (hash.equals(rs.getString("passord")))
             {
-                return this.getEmployeeId(rs.getString("brukernavn"));
+                return this.getEmployeeId(account);
             }
+
             return -1;
             } catch (SQLException | NoSuchAlgorithmException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -78,7 +74,7 @@ public class DatabaseHandler
     }
 
     public int getEmployeeId(String username) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT id FROM employee WHERE brukernavn = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT id FROM ansatt WHERE brukernavn = ?");
 
         query.setString(1, username);
         ResultSet rs = query.executeQuery();
@@ -87,7 +83,7 @@ public class DatabaseHandler
         {
             return -1;
         }
-        return rs.getInt ("brukernavn");
+        return rs.getInt ("id");
     }
 
 
@@ -155,11 +151,41 @@ public class DatabaseHandler
         }
     }
 
-    public void inviteEmployee (int employeeId, int appointmentId) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("INSERT INTO invitert_avtale (ansattId,avtaleId) VALUES (?,?)");
-
+    public void removeParticipant (int employeeId, int appointmentId) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("DELETE FROM invitert_avtale WHERE ansattid = ? AND avtaleid = ?");
         query.setInt(1, employeeId);
         query.setInt(2, appointmentId);
+        query.executeUpdate();
+    }
+
+    public ArrayList <Integer> getParticipants (int appointmentId) throws SQLException {
+        ArrayList <Integer> id = new ArrayList<Integer>();
+
+        PreparedStatement query = this.db.prepareStatement("SELECT ansattid FROM invitert_avtale WHERE avtaleid = ? AND id = ?");
+        query.setInt(1, appointmentId);
+        ResultSet rs;
+
+        for (int i = 0; i < getNextAutoIncrement("invitert_avtale"); i++)
+        {
+            query.setInt(2, i);
+            rs = query.executeQuery();
+            if (rs.next())
+            {
+                id.add(rs.getInt("ansattid"));
+            }
+        }
+
+        return id;
+    }
+
+    public void inviteEmployee (int employeeId, int appointmentId) throws SQLException {
+        int id = getNextAutoIncrement("invitert_avtale");
+
+        PreparedStatement query = this.db.prepareStatement("INSERT INTO invitert_avtale (id, ansattId,avtaleId) VALUES (?,?,?)");
+
+        query.setInt(1, id);
+        query.setInt(2, employeeId);
+        query.setInt(3, appointmentId);
         query.executeUpdate();
 
     }
@@ -173,7 +199,7 @@ public class DatabaseHandler
 
     }
 
-    public boolean answerFromUser (int employeeId, int appointmentId) throws SQLException {
+    public boolean getAnswer (int employeeId, int appointmentId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT skal_komme FROM invitert_avtale WHERE ansattid = ? AND avtaleid = ?");
         query.setInt(1, employeeId);
         query.setInt(2, appointmentId);
@@ -234,7 +260,7 @@ public class DatabaseHandler
     }
 
     public Employee getEmployee (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT brukernavn, passord, epost, navn FROM employee WHERE id = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT brukernavn, passord, epost, navn FROM ansatt WHERE id = ?");
         query.setInt(1, id);
         ResultSet rs = query.executeQuery();
 
@@ -317,6 +343,36 @@ public class DatabaseHandler
             return null;
         }
         return new Group(rs.getString("gruppenr"), rs.getString("epost"));
+    }
+
+    public void addMember (int groupId, int employeeId) throws SQLException {
+        int id = getNextAutoIncrement("medlem_av");
+
+        PreparedStatement query = this.db.prepareStatement("INSERT INTO medlem_av (id, medlemid, gruppeid) VALUES (?,?,?)");
+        query.setInt(1, id);
+        query.setInt(2, employeeId);
+        query.setInt(3, groupId);
+        query.executeUpdate();
+    }
+
+    public ArrayList <Integer> getMemberId(int groupId) throws SQLException {
+        ArrayList <Integer> id = new ArrayList<Integer>();
+
+        PreparedStatement query = this.db.prepareStatement("SELECT medlemid FROM medlem_av WHERE gruppeid = ? AND id = ?");
+        query.setInt(1, groupId);
+        ResultSet rs;
+
+        for (int i = 0; i < getNextAutoIncrement("medlem_av"); i++)
+        {
+            query.setInt(2, i);
+            rs = query.executeQuery();
+            if (rs.next())
+            {
+                id.add(rs.getInt("medlemid"));
+            }
+        }
+
+        return id;
     }
 
     private int getNextAutoIncrement(String table) throws SQLException
