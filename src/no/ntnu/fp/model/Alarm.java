@@ -1,17 +1,17 @@
 package no.ntnu.fp.model;
 
 import java.sql.Date;
-import java.sql.Time;
-import java.util.ArrayList;
 
 public class Alarm {
 	private int id;
+    private int appointmentID;
 	private String message;
 	private Date time;
 	
-	public Alarm(ArrayList <Employee> p, String m, Date d){
+	public Alarm(String m, Date d, int appointmentID){
 		message=m;
 		time=d;
+        this.appointmentID = appointmentID;
 	}
 
 	public int getId() {
@@ -37,7 +37,9 @@ public class Alarm {
 	public void setTime(Date time) {
 		this.time = time;
 	}
-	
 
-	
+
+    public int getAppointmentID() {
+        return appointmentID;
+    }
 }

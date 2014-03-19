@@ -4,9 +4,17 @@ import java.util.ArrayList;
 
 public class Group {
 	private int id;
+    private String email;
+    private String name;
 	private ArrayList <Employee> members;
 	private ArrayList <Appointment> invitedAppointments;
-	
+
+
+     public Group (String groupName, String email)
+     {
+         this.email = email;
+         this.name = groupName;
+     }
 	public int getId() {
 		return id;
 	}

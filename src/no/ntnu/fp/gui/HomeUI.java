@@ -7,6 +7,10 @@
 package no.ntnu.fp.gui;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
+import no.ntnu.fp.model.*;
+import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  *
@@ -17,7 +21,15 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     /**
      * Creates new form FellProUI
      */
-    public HomeUI() {
+
+    private int userID;
+    private Employee user;
+    private DatabaseHandler data;
+
+    public HomeUI(int userID) throws SQLException {
+        data = new DatabaseHandler();
+        this.userID = userID;
+        user = data.getEmployee(userID);
         initComponents();
     }
 

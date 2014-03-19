@@ -6,6 +6,8 @@
 
 package no.ntnu.fp.gui;
 
+import no.ntnu.fp.storage.DatabaseHandler;
+
 import java.awt.event.ActionListener;
 
 /**
@@ -17,6 +19,8 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
     /**
      * Creates new form LoginUItest
      */
+    private DatabaseHandler data= new DatabaseHandler();
+
     public LoginUI() {
         initComponents();
     }
@@ -153,26 +157,30 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
             LoginUI.this.UsernameTextFieldActionPerformed(evt);
         }
         else if (evt.getSource() == loginTestButton) {
-            LoginUI.this.loginTestButtonActionPerformed(evt);
+            //LoginUI.this.loginTestButtonActionPerformed(evt);
         }
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         String user= UsernameTextField.getText();
         String pwd= new String (passwordTextField.getPassword());
-        if (user.equals("yourusername") && pwd.equals("yourpassword")) //Mysql-opplegg?
-            new HomeUI().setVisible(true);
+        if (data.authenticate(user, pwd)!=-1){
+            new HomeUI(data.authenticate(user, pwd)).setVisible(true);
+        }
+        else{
+            UsernameTextField.setText("Feil brukernavn og/eller passord");
+        }
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void UsernameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_UsernameTextFieldActionPerformed
 
-    private void loginTestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginTestButtonActionPerformed
+   /* private void loginTestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginTestButtonActionPerformed
         new HomeUI().setVisible(true);
         dispose();
     }//GEN-LAST:event_loginTestButtonActionPerformed
-
+      */
     /**
      * @param args the command line arguments
      */

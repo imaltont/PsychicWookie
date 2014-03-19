@@ -1,7 +1,6 @@
 package no.ntnu.fp.model;
 
 import java.sql.Date;
-import java.sql.Time;
 import java.util.ArrayList;
 
 
@@ -14,10 +13,10 @@ public class Appointment {
 	private Location location2;
 	private ArrayList <Employee> participants;
 	private String message;
-	private Employee owner;
+	private int owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date sT, Date eT, String l, String m, Employee o){
+	public Appointment(Date sT, Date eT, String l, String m, int o){
 		participants = new ArrayList <Employee>();
 		startTime = sT;
 		endTime = eT;
@@ -75,10 +74,10 @@ public class Appointment {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	public Employee getOwner() {
+	public int getOwner() {
 		return owner;
 	}
-	public void setOwner(Employee owner) {
+	public void setOwner(int owner) {
 		this.owner = owner;
 	}
 	public Alarm getAlarm() {
