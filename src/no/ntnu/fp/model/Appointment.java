@@ -1,11 +1,8 @@
 package no.ntnu.fp.model;
 
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
-
-import no.ntnu.fp.storage.DatabaseHandler;
 
 
 
@@ -14,30 +11,19 @@ public class Appointment {
 	private Date startTime;
 	private Date endTime;
 	private String location;
+	private Location location2;
 	private ArrayList <Employee> participants;
-	private String description;
+	private String message;
 	private Employee owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date sT, Date eT, int loc, String des, int oID) throws SQLException{
-		DatabaseHandler data = new DatabaseHandler();
-		data.addAppointment(loc, sT, eT, des, oID);
+	public Appointment(Date sT, Date eT, String l, String m, Employee o){
 		participants = new ArrayList <Employee>();
 		startTime = sT;
 		endTime = eT;
-		location = data.getLocation(loc).getName();
-		description=des;
-		owner = data.getEmployee(oID); 
-		
-	}
-	public Appointment(Date sT, Date eT, String loc, String des, int oID) throws SQLException{
-		DatabaseHandler data = new DatabaseHandler();
-		data.addAppointmentCustomPlace(loc, sT, eT, des, oID);
-		participants = new ArrayList <Employee>();
-		startTime = sT;
-		endTime = eT;
-		location=loc;
-		owner = data.getEmployee(oID);
+		location = l;
+		message = m;
+		owner = o;
 	}
 	//Logic
 	public void removeParticipant(Employee employee){
@@ -47,31 +33,12 @@ public class Appointment {
 		participants.add(employee);
 	}
 	//Setters & getters
-	public Employee getOwner() {
-		return owner;
-	}
-	public void setOwner(Employee owner) {
-		this.owner = owner;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	public ArrayList<Employee> getParticipants() {
-		return participants;
-	}
-	public void setParticipants(ArrayList<Employee> participants) {
-		this.participants = participants;
-	}
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -90,6 +57,35 @@ public class Appointment {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	public Location getLocation2() {
+		return location2;
+	}
+	public void setLocation2(Location location2) {
+		this.location2 = location2;
+	}
+	public ArrayList<Employee> getParticipants() {
+		return participants;
+	}
+	public void setParticipants(ArrayList<Employee> participants) {
+		this.participants = participants;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public Employee getOwner() {
+		return owner;
+	}
+	public void setOwner(Employee owner) {
+		this.owner = owner;
+	}
+	public Alarm getAlarm() {
+		return alarm;
+	}
+	public void setAlarm(Alarm alarm) {
+		this.alarm = alarm;
+	}
+
 }
-
-

@@ -4,39 +4,40 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
-import no.ntnu.fp.storage.DatabaseHandler;
-
 public class Alarm {
 	private int id;
 	private String message;
-	private Date date;
+	private Date time;
 	
-	public Alarm(String m, Date d, int appointmentId){
-		DatabaseHandler data = new DatabaseHandler();
-		data.addAlarm(m, d, appointmentId);
+	public Alarm(ArrayList <Employee> p, String m, Date d){
 		message=m;
-		date=d;
+		time=d;
 	}
-	
-	
+
 	public int getId() {
 		return id;
 	}
-	public void setId(int id){
-		this.id=id;
+
+	public void setId(int id) {
+		this.id = id;
 	}
+
 	public String getMessage() {
 		return message;
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
 	}
 
-	public Date getDate() {
-		return date;
+	public Date getTime() {
+		return time;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setTime(Date time) {
+		this.time = time;
 	}
+	
+
 	
 }

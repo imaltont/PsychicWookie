@@ -1,9 +1,6 @@
-
 package no.ntnu.fp.model;
 
 import java.util.ArrayList;
-
-import no.ntnu.fp.storage.DatabaseHandler;
 
 public class Employee {
 	private String username;
@@ -15,16 +12,13 @@ public class Employee {
 	private ArrayList <Alarm> alarms;
 	
 
-	public Employee(String u, String p, String e, String n){
-		DatabaseHandler data = new DatabaseHandler();
-		data.addUser(u, p, e, n);
-		username=u;
-		password=p;
-		email=e;
-		name=n;
-		
-	}
 //Setters & getters
+	public Employee(String username, String password, String email, String name){
+		this.username=username;
+		this.password=password;
+		this.email=email;
+		this.name=name;
+	}
 	public ArrayList<Alarm> getAlarms() {
 		return alarms;
 	}
@@ -69,4 +63,3 @@ public class Employee {
 	}
 
 }
-
