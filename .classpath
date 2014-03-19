@@ -4,5 +4,7 @@
 	<classpathentry excluding="test/" kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/Sondre/Documents/javax.mail.jar"/>
+	<classpathentry kind="lib" path="lib/DateChooser.jar"/>
+	<classpathentry kind="lib" path="lib/FellesprosjektGUI.jar" sourcepath="lib/FellesprosjektGUI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
