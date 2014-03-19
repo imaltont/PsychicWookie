@@ -174,6 +174,7 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
         }
         else{
             UsernameTextField.setText("Feil brukernavn og/eller passord");
+            loginWarning.setVisible(true);
         }
     }//GEN-LAST:event_LoginButtonActionPerformed
 

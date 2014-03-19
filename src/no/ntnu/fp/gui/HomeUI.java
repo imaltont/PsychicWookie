@@ -33,6 +33,9 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         initComponents();
     }
 
+ 
+ 
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,7 +45,7 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        homePanel = new javax.swing.JPanel();
         UkeNrTittel = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
         otherCalendarsButton = new javax.swing.JButton();
@@ -56,9 +59,10 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         weekNumberTextField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("WookieCookie"); // NOI18N
         setResizable(false);
 
-        jPanel1.setName("jPanel1"); // NOI18N
+        homePanel.setName("homePanel"); // NOI18N
 
         UkeNrTittel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         UkeNrTittel.setText("Uke nr:");
@@ -66,9 +70,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
 
         logoutButton.setText("Logg ut");
         logoutButton.setName("logoutButton"); // NOI18N
+        logoutButton.addActionListener(this);
 
         otherCalendarsButton.setText("Andre kalendere");
         otherCalendarsButton.setName("otherCalendarsButton"); // NOI18N
+        otherCalendarsButton.addActionListener(this);
 
         makeAppointmentButton.setBackground(new java.awt.Color(255, 0, 51));
         makeAppointmentButton.setText("Opprett avtale");
@@ -173,24 +179,24 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         weekNumberTextField.setText("00");
         weekNumberTextField.setName("weekNumberTextField"); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout homePanelLayout = new javax.swing.GroupLayout(homePanel);
+        homePanel.setLayout(homePanelLayout);
+        homePanelLayout.setHorizontalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(homePanelLayout.createSequentialGroup()
                 .addGap(64, 64, 64)
                 .addComponent(UkeNrTittel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(weekNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(homePanelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(LastWeek, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homePanelLayout.createSequentialGroup()
                         .addComponent(NextWeek)
                         .addGap(32, 32, 32)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -199,18 +205,18 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
                     .addComponent(logoutButton, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(0, 39, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        homePanelLayout.setVerticalGroup(
+            homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(homePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(UkeNrTittel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(weekNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(homePanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(homePanelLayout.createSequentialGroup()
                                 .addGap(13, 13, 13)
                                 .addComponent(logoutButton)
                                 .addGap(18, 18, 18)
@@ -218,11 +224,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
                                 .addGap(18, 18, 18)
                                 .addComponent(otherCalendarsButton)
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(homePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(NextWeek, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jComboBox1)))
                             .addComponent(calendarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(homePanelLayout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(LastWeek)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -232,11 +238,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(homePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(homePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -251,6 +257,12 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         else if (evt.getSource() == LastWeek) {
             HomeUI.this.LastWeekActionPerformed(evt);
         }
+        else if (evt.getSource() == logoutButton) {
+            HomeUI.this.logoutButtonActionPerformed(evt);
+        }
+        else if (evt.getSource() == otherCalendarsButton) {
+            HomeUI.this.otherCalendarsButtonActionPerformed(evt);
+        }
     }// </editor-fold>//GEN-END:initComponents
 
     private void LastWeekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LastWeekActionPerformed
@@ -258,10 +270,27 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_LastWeekActionPerformed
 
     private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
-        new MakeAppointmentUI().setVisible(true);
-        dispose();
+        this.removeAll();
+        this.add(new MakeAppointmentPanelUI());
+        
+        //new MakeAppointmentUI().setVisible(true);
+        //dispose();
         
     }//GEN-LAST:event_makeAppointmentButtonActionPerformed
+
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+        MakeAppointmentUI makeApp = new MakeAppointmentUI();
+        this.getContentPane().add(makeApp);
+        makeApp.setVisible(true);
+        setVisible(false);
+        //dispose();
+        
+        
+    }//GEN-LAST:event_logoutButtonActionPerformed
+
+    private void otherCalendarsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherCalendarsButtonActionPerformed
+        new AddEmployeeDialogUI(this, false).setVisible(true);
+    }//GEN-LAST:event_otherCalendarsButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -308,8 +337,8 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JButton NextWeek;
     private javax.swing.JLabel UkeNrTittel;
     private javax.swing.JPanel calendarPanel;
+    private javax.swing.JPanel homePanel;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton logoutButton;
     private javax.swing.JButton makeAppointmentButton;
