@@ -368,7 +368,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     }//GEN-LAST:event_addPersonButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelButtonActionPerformed
-        new HomeUI().setVisible(true);
+        //new HomeUI().setVisible(true);
         dispose();
         
     }//GEN-LAST:event_CancelButtonActionPerformed

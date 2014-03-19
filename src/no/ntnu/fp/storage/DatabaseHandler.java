@@ -8,18 +8,13 @@ package no.ntnu.fp.storage;
  * To change this template use File | Settings | File Templates.
  */
 
+import no.ntnu.fp.model.*;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
-
-
-import no.ntnu.fp.model.Employee;
-import no.ntnu.fp.model.Alarm;
-import no.ntnu.fp.model.Appointment;
-import no.ntnu.fp.model.Location;
-import no.ntnu.fp.model.Group;
 
 
 
@@ -53,9 +48,9 @@ public class DatabaseHandler
 
     public int authenticate (String account, String password)
     {
-        PreparedStatement query = null;
+
         try {
-            query = this.db.prepareStatement("SELECT id, password FROM ansatt WHERE brukernavn = ?");
+            PreparedStatement query = this.db.prepareStatement("SELECT id, passord FROM ansatt WHERE brukernavn = ?");
             query.setString(1, account);
             ResultSet rs = query.executeQuery();
 
@@ -67,8 +62,9 @@ public class DatabaseHandler
             String hash = encryptPassword(password);
             if (hash.equals(rs.getString("passord")))
             {
-                return this.getEmployeeId(rs.getString("brukernavn"));
+                return this.getEmployeeId(account);
             }
+
             return -1;
             } catch (SQLException | NoSuchAlgorithmException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -78,7 +74,7 @@ public class DatabaseHandler
     }
 
     public int getEmployeeId(String username) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT id FROM employee WHERE brukernavn = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT id FROM ansatt WHERE brukernavn = ?");
 
         query.setString(1, username);
         ResultSet rs = query.executeQuery();
@@ -87,7 +83,7 @@ public class DatabaseHandler
         {
             return -1;
         }
-        return rs.getInt ("brukernavn");
+        return rs.getInt ("id");
     }
 
 
@@ -264,7 +260,7 @@ public class DatabaseHandler
     }
 
     public Employee getEmployee (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT brukernavn, passord, epost, navn FROM employee WHERE id = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT brukernavn, passord, epost, navn FROM ansatt WHERE id = ?");
         query.setInt(1, id);
         ResultSet rs = query.executeQuery();
 

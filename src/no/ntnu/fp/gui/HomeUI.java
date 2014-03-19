@@ -6,11 +6,11 @@
 
 package no.ntnu.fp.gui;
 
+import no.ntnu.fp.model.Employee;
+import no.ntnu.fp.storage.DatabaseHandler;
+
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-
-import no.ntnu.fp.model.*;
-import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  *
@@ -22,7 +22,7 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
      * Creates new form FellProUI
      */
 
-    private int userID;
+    private static int userID;
     private Employee user;
     private DatabaseHandler data;
 
@@ -293,7 +293,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomeUI().setVisible(true);
+                try {
+                    new HomeUI(userID).setVisible(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
         });
     }

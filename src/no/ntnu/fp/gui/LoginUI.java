@@ -9,6 +9,7 @@ package no.ntnu.fp.gui;
 import no.ntnu.fp.storage.DatabaseHandler;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 /**
  *
@@ -151,7 +152,11 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
 
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         if (evt.getSource() == LoginButton) {
-            LoginUI.this.LoginButtonActionPerformed(evt);
+            try {
+                LoginUI.this.LoginButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == UsernameTextField) {
             LoginUI.this.UsernameTextFieldActionPerformed(evt);
@@ -161,10 +166,10 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
         }
     }// </editor-fold>//GEN-END:initComponents
 
-    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
+    private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_LoginButtonActionPerformed
         String user= UsernameTextField.getText();
         String pwd= new String (passwordTextField.getPassword());
-        if (data.authenticate(user, pwd)!=-1){
+        if (data.authenticate(user, pwd)!= (-1)){
             new HomeUI(data.authenticate(user, pwd)).setVisible(true);
         }
         else{
