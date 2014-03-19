@@ -24,10 +24,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
 
     private static int userID;
     private Employee user;
-    private DatabaseHandler data;
+    private static DatabaseHandler data;
 
-    public HomeUI(int userID) throws SQLException {
-        data = new DatabaseHandler();
+
+    public HomeUI(int userID, DatabaseHandler data) throws SQLException {
+        this.data = data;
         this.userID = userID;
         user = data.getEmployee(userID);
         initComponents();
@@ -258,7 +259,7 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_LastWeekActionPerformed
 
     private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
-        new MakeAppointmentUI().setVisible(true);
+        new MakeAppointmentUI(userID, data).setVisible(true);
         dispose();
         
     }//GEN-LAST:event_makeAppointmentButtonActionPerformed
@@ -294,7 +295,7 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new HomeUI(userID).setVisible(true);
+                    new HomeUI(userID, data).setVisible(true);
                 } catch (SQLException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
