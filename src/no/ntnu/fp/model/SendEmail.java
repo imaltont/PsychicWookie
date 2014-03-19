@@ -5,6 +5,7 @@ import javax.mail.internet.*;
 import javax.activation.*;
 
 public class SendEmail {
+    //endring
 	 String to;
 	 String from;
 	 String host;
