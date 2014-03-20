@@ -88,15 +88,15 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateChooserCombo.setDateFormat(dFormat);
 
-        fromTextField.setText("00");
+        fromTextField.setText("01");
         fromTextField.setName("fromTextField"); // NOI18N
         fromTextField.addActionListener(this);
 
-        toTextField.setText("00");
+        toTextField.setText("02");
         toTextField.setName("toTextField"); // NOI18N
         toTextField.addActionListener(this);
 
-        durationTextField.setText("00");
+        durationTextField.setText((Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()))+"");
         durationTextField.setName("durationTextField"); // NOI18N
         durationTextField.addActionListener(this);
 
@@ -419,6 +419,25 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
             {
                 toTextField.setText("24");
                 durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+        }
+
+        else if (evt.getSource() == durationTextField)
+        {
+            /*if (Integer.parseInt(fromTextField.getText())>Integer.parseInt(toTextField.getText()))
+            {
+                toTextField.setText((Integer.parseInt(fromTextField.getText())+(Integer.parseInt(durationTextField.getText()))+""));
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }*/
+
+            if (Integer.parseInt(durationTextField.getText()) > 23)
+            {
+                toTextField.setText("24");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            else
+            {
+                toTextField.setText(Integer.parseInt(fromTextField.getText()) + Integer.parseInt(durationTextField.getText()) +"");
             }
         }
     }// </editor-fold>//GEN-END:initComponents
