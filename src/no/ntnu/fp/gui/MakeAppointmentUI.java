@@ -194,7 +194,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
 
         for (int i = 1; i < data.getNumberOfPlaces(); i++)
         {
-            roomListModel.addElement(data.getLocation(i).getName());
+            roomListModel.addElement(data.getLocation(data.getLocationName(i)).getName());
         }
         choosePlaceList.setName("choosePlaceList"); // NOI18N
         choosePlaceScrollPane.setViewportView(choosePlaceList);
