@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -27,6 +28,9 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     private static DatabaseHandler data;
     private DefaultListModel invitedListModel;
     private DefaultListModel roomListModel;
+    private Calendar fromTime;
+    private Calendar toTime;
+    private int durationHour;
 
     public MakeAppointmentUI(int userID, DatabaseHandler data) throws SQLException {
         this.data = data;
@@ -42,15 +46,17 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() throws SQLException {
+        fromTime = Calendar.getInstance();
+        toTime = Calendar.getInstance();
         invitedListModel = new DefaultListModel();
         roomListModel = new DefaultListModel();
         jPanel1 = new javax.swing.JPanel();
         WhenPanel = new javax.swing.JPanel();
         dateChooserCombo = new datechooser.beans.DateChooserCombo();
         DateLabel = new javax.swing.JLabel();
-        fromTextField = new javax.swing.JTextField();
-        toTextField = new javax.swing.JTextField();
-        durationTextField = new javax.swing.JTextField();
+        fromTextField = new javax.swing.JFormattedTextField();
+        toTextField = new javax.swing.JFormattedTextField();
+        durationTextField = new javax.swing.JFormattedTextField();
         okButton = new javax.swing.JButton();
         fromLabel = new javax.swing.JLabel();
         durationLabel = new javax.swing.JLabel();
@@ -88,14 +94,21 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateChooserCombo.setDateFormat(dFormat);
 
-        fromTextField.setText("00:00");
+        DateFormat tFormat = new SimpleDateFormat("hh:mm");
+
+        fromTextField.setText(String.valueOf(fromTime.getTime().getHours()) + "");
         fromTextField.setName("fromTextField"); // NOI18N
+        fromTextField.addActionListener(this);
 
-        toTextField.setText("00:00");
+        toTime.add(Calendar.HOUR_OF_DAY, 1);
+        toTextField.setText(String.valueOf(toTime.getTime().getHours() + ""));
         toTextField.setName("toTextField"); // NOI18N
+        toTextField.addActionListener(this);
 
-        durationTextField.setText("00:00");
+        durationHour= toTime.getTime().getHours() - fromTime.getTime().getHours();
+        durationTextField.setText(durationHour + "");
         durationTextField.setName("durationTextField"); // NOI18N
+        durationTextField.addActionListener(this);
 
         okButton.setText("Se ledige rom");
         okButton.setName("okButton"); // NOI18N
@@ -382,9 +395,60 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
         }
+
+        else if (evt.getSource() == toTextField)
+        {
+            if (Integer.parseInt(fromTextField.getText())< Integer.parseInt(toTextField.getText()))
+            {
+                durationHour = Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText());
+                durationTextField.setText(durationHour + "");
+            }
+            else
+            {
+                toTextField.setText((Integer.parseInt(fromTextField.getText())+1) + "");
+                durationHour = Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText());
+                durationTextField.setText(durationHour + "");
+            }
+            if (Integer.parseInt(toTextField.getText()) > 24)
+            {
+                toTextField.setText("24");
+                durationHour = Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText());
+                durationTextField.setText(durationHour + "");
+            }
+        }
+        else if (evt.getSource() == durationTextField)
+        {
+            if (Integer.parseInt(durationTextField.getText()) > 23)
+            {
+                toTextField.setText("24");
+                durationHour = Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText());
+                durationTextField.setText(durationHour + "");
+            }
+            toTextField.setText((Integer.parseInt(fromTextField.getText())+Integer.parseInt(durationTextField.getText()))+"");
+        }
+        else if (evt.getSource() == fromTextField)
+        {
+            if (Integer.parseInt(fromTextField.getText()) >= Integer.parseInt(toTextField.getText()))
+            {
+                toTextField.setText((Integer.parseInt(fromTextField.getText())+1) + "");
+                durationTextField.setText("1");
+            }
+            else
+            {
+                durationHour = Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText());
+                durationTextField.setText(durationHour + "");
+            }
+            if (Integer.parseInt(fromTextField.getText()) > 23)
+            {
+                fromTextField.setText("23");
+                toTextField.setText("24");
+                durationTextField.setText("1");
+            }
+
+        }
     }// </editor-fold>//GEN-END:initComponents
 
-    private void writePlaceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writePlaceTextFieldActionPerformed
+   private void writePlaceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writePlaceTextFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_writePlaceTextFieldActionPerformed
 
@@ -451,9 +515,9 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     private javax.swing.JScrollPane choosePlaceScrollPane;
     private datechooser.beans.DateChooserCombo dateChooserCombo;
     private javax.swing.JLabel durationLabel;
-    private javax.swing.JTextField durationTextField;
+    private javax.swing.JFormattedTextField durationTextField;
     private javax.swing.JLabel fromLabel;
-    private javax.swing.JTextField fromTextField;
+    private javax.swing.JFormattedTextField fromTextField;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -463,7 +527,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     private javax.swing.JList personList;
     private javax.swing.JLabel slashLabel;
     private javax.swing.JLabel toLabel;
-    private javax.swing.JTextField toTextField;
+    private javax.swing.JFormattedTextField toTextField;
     private javax.swing.JLabel writePlaceLabel;
     private javax.swing.JTextField writePlaceTextField;
 
