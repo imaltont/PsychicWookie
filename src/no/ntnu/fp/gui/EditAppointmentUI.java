@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -329,6 +331,7 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
 
         deleteButton.setText("Slett");
         deleteButton.setName("deleteButton"); // NOI18N
+        deleteButton.addActionListener(this);
 
         javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
         buttonPanel.setLayout(buttonPanelLayout);
@@ -415,6 +418,9 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         else if (evt.getSource() == SaveButton) {
             EditAppointmentUI.this.SaveButtonActionPerformed(evt);
         }
+        else if (evt.getSource() == deleteButton) {
+            EditAppointmentUI.this.deleteButtonActionPerformed(evt);
+        }
     }// </editor-fold>//GEN-END:initComponents
 
     private void writePlaceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writePlaceTextFieldActionPerformed
@@ -430,6 +436,14 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         dispose();
         
     }//GEN-LAST:event_CancelButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        try {
+            data.deleteAppointment(userID);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditAppointmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
 
     /**
      * @param args the command line arguments
