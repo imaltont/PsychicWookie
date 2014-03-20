@@ -153,13 +153,21 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
 
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         if (evt.getSource() == LoginButton) {
-            LoginUI.this.LoginButtonActionPerformed(evt);
+            try {
+                LoginUI.this.LoginButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == UsernameTextField) {
             LoginUI.this.UsernameTextFieldActionPerformed(evt);
         }
         else if (evt.getSource() == loginTestButton) {
-            LoginUI.this.loginTestButtonActionPerformed(evt);
+            try {
+                LoginUI.this.loginTestButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == RegisterButton) {
             LoginUI.this.RegisterButtonActionPerformed(evt);

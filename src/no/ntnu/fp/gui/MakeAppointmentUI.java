@@ -88,14 +88,17 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateChooserCombo.setDateFormat(dFormat);
 
-        fromTextField.setText("00:00");
+        fromTextField.setText("00");
         fromTextField.setName("fromTextField"); // NOI18N
+        fromTextField.addActionListener(this);
 
-        toTextField.setText("00:00");
+        toTextField.setText("00");
         toTextField.setName("toTextField"); // NOI18N
+        toTextField.addActionListener(this);
 
-        durationTextField.setText("00:00");
+        durationTextField.setText("00");
         durationTextField.setName("durationTextField"); // NOI18N
+        durationTextField.addActionListener(this);
 
         okButton.setText("Se ledige rom");
         okButton.setName("okButton"); // NOI18N
@@ -380,6 +383,42 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
                 MakeAppointmentUI.this.CancelButtonActionPerformed(evt);
             } catch (SQLException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
+        else if (evt.getSource() == fromTextField)
+        {
+            if (Integer.parseInt(fromTextField.getText())>Integer.parseInt(toTextField.getText()))
+            {
+                toTextField.setText((Integer.parseInt(fromTextField.getText())+1)+"");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            else
+            {
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            if (Integer.parseInt(fromTextField.getText()) > 23)
+            {
+                fromTextField.setText("23");
+                toTextField.setText("24");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+        }
+        else if (evt.getSource() == toTextField)
+        {
+            if (Integer.parseInt(fromTextField.getText())>Integer.parseInt(toTextField.getText()))
+            {
+                fromTextField.setText((Integer.parseInt(toTextField.getText())-1)+"");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+
+            else
+            {
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            if (Integer.parseInt(toTextField.getText()) > 24)
+            {
+                toTextField.setText("24");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
             }
         }
     }// </editor-fold>//GEN-END:initComponents
