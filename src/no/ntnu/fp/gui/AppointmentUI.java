@@ -6,10 +6,11 @@
 
 package no.ntnu.fp.gui;
 
+import no.ntnu.fp.model.Appointment;
+
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import no.ntnu.fp.model.Appointment;
 
 /**
  *
@@ -41,7 +42,7 @@ public class AppointmentUI extends javax.swing.JPanel {
         toTextField.setText(tidFormat.format(startdato));
         fromTextField.setText(tidFormat.format(sluttdato));
         
-        choosePlaceList.
+        //choosePlaceList
         
       
         
