@@ -144,6 +144,13 @@ public class DatabaseHandler
             query.setInt(6, ownerId);
             query.executeUpdate();
 
+            int roomid = getNextAutoIncrement("sted_tilgjengelig");
+            query = this.db.prepareStatement( ("INSERT INTO sted_tilgjengelig (id, romnr, avtaleid)VALUES (?,?,?)"));
+            query.setInt(1, roomid);
+            query.setString(2, getLocationName(placeId));
+            query.setInt(3, id);
+            query.executeUpdate();
+
             return id;
         } catch (SQLException  e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -220,7 +227,48 @@ public class DatabaseHandler
 
     }
 
+    public boolean locationIsAvailable (String roomnr, java.sql.Date startDate, java.sql.Date endDate) throws SQLException {
+        for (int i = 1; i <= getNextAutoIncrement("avtale"); i++)
+        {
+            if (getAppointment(i) == null)
+            {
 
+            }
+            else
+            {
+                for (int y = 1; y <= getNextAutoIncrement("sted"); y++)
+                {
+                    if ((getLocationAppointmentId(roomnr, y) != 0) && (getAppointment(i).getStartTime().equals(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime())))
+                    {
+                          return false;
+                    }
+                    else if ((getLocationAppointmentId(roomnr, y) != 0) && getAppointment(i).getStartTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()) && getAppointment(i).getEndTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()))
+                    {
+                        return false;
+                    }
+                    else if ((getLocationAppointmentId(roomnr, y) != 0) && getAppointment(i).getStartTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()) && getAppointment(i).getEndTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public int getLocationAppointmentId(String roomnr, int id) throws SQLException {
+
+        PreparedStatement query = this.db.prepareStatement("SELECT avtaleid FROM sted_tilgjengelig WHERE id = ? AND romnr = ?");
+        query.setInt(1, id);
+        query.setString(2, roomnr);
+        ResultSet rs = query.executeQuery();
+
+        if (!rs.next())
+        {
+            return 0;
+        }
+        return rs.getByte("avtaleid");
+    }
 
     public Location getLocationAvailable(String roomnr, int numberOfSeats, java.sql.Date endDate, java.sql.Date startDate) throws SQLException {
             if (getLocation(roomnr).isAvailable(startDate, endDate, numberOfSeats))
@@ -270,6 +318,11 @@ public class DatabaseHandler
         }
     }
 
+    public void updateAppointment ()
+    {
+
+    }
+
 
     public void deleteAppointment (int appointmentId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("DELETE FROM avtale WHERE avtaleId = ?");
@@ -293,7 +346,7 @@ public class DatabaseHandler
     }
 
     public Appointment getAppointment (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement("SELECT dato, starttid, sluttid, sted, c_sted, beskrivelse, eierid FROM avtale WHERE avtaleid = ?");
+        PreparedStatement query = this.db.prepareStatement("SELECT starttid, sluttid, sted, c_sted, beskrivelse, eierid FROM avtale WHERE avtaleid = ?");
         query.setInt(1, id);
         ResultSet rs = query.executeQuery();
 
