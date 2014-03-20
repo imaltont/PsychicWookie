@@ -294,12 +294,10 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_makeAppointmentButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_logoutButtonActionPerformed
-        MakeAppointmentUI makeApp = new MakeAppointmentUI(userID, data);
-        this.getContentPane().add(makeApp);
+        LoginUI makeApp = new LoginUI();
         makeApp.setVisible(true);
         setVisible(false);
-        //dispose();
-        
+
         
     }//GEN-LAST:event_logoutButtonActionPerformed
 
