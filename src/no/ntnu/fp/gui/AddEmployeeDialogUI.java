@@ -25,6 +25,7 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionLi
     private DefaultListModel personListModel;
     private static DatabaseHandler data;
     private static MakeAppointmentUI dialogUI;
+    private static EditAppointmentUI editDialogUI;
 
     /**
      * Creates new form AddEmployeeDialogUI
@@ -36,7 +37,14 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionLi
         this.personListModel = personListModel;
         initComponents();
     }
-public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, MakeAppointmentUI dialog) throws SQLException {
+        public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, EditAppointmentUI dialog, DefaultListModel personListModel) throws SQLException {
+        super(parent, modal);
+        this.data = data;
+        this.editDialogUI = dialog;
+        this.personListModel = personListModel;
+        initComponents();
+    }
+    public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, MakeAppointmentUI dialog) throws SQLException {
         super(parent, modal);
         this.data = data;
         this.dialogUI = dialog;
