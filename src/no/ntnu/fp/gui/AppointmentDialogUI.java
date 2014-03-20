@@ -12,9 +12,13 @@ import no.ntnu.fp.model.Employee;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  * 
@@ -23,14 +27,21 @@ import java.util.ArrayList;
  */
 public class AppointmentDialogUI extends javax.swing.JDialog implements ActionListener {
 
-        private Appointment modelApp;
+    private Appointment modelApp = null;
+    private static DatabaseHandler data;
+    private static int userID;
+    private static int appointmentID;
     
     
     /**
      * Creates new form AppointmentDialogUI
      */
-    public AppointmentDialogUI(java.awt.Frame parent, boolean modal) {
+    public AppointmentDialogUI(java.awt.Frame parent, boolean modal, int userID, DatabaseHandler data) throws SQLException {
         super(parent, modal);
+        this.data = data;
+        this.userID = userID;
+        this.appointmentID = data.getAppointmentId(userID);
+        setModelApp(data.getAppointment(appointmentID));
         initComponents();
     }
 
@@ -51,9 +62,10 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         toTextField.setText(tidFormat.format(startdato));
         fromTextField.setText(tidFormat.format(sluttdato));
         
+        //setter location
         locationTextField.setText(appo.getLocation());
         
-        
+        //setter ivitedList
         ArrayList<Employee> invitedPersonList = appo.getParticipants();
         DefaultListModel<String> model = new DefaultListModel<String>();
         for(Employee p : invitedPersonList){
@@ -61,6 +73,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
             }
         personList.setModel(model);
         
+        //setter beskrivelsen
         infoTextArea.setText(appo.getMessage());
         
       
@@ -134,7 +147,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
 
         dateTextField.setEditable(false);
         dateTextField.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        dateTextField.setText("yyyy/MM/dd");
+        dateTextField.setText("dd/mm/yy");
         dateTextField.setName("dateTextField"); // NOI18N
 
         javax.swing.GroupLayout WhenPanelLayout = new javax.swing.GroupLayout(WhenPanel);
@@ -256,6 +269,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         acceptButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         acceptButton.setText("Godta");
         acceptButton.setName("acceptButton"); // NOI18N
+        acceptButton.addActionListener(this);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -319,11 +333,28 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         if (evt.getSource() == declineButton) {
             AppointmentDialogUI.this.declineButtonActionPerformed(evt);
         }
+        else if (evt.getSource() == acceptButton) {
+            AppointmentDialogUI.this.acceptButtonActionPerformed(evt);
+        }
     }// </editor-fold>//GEN-END:initComponents
 
     private void declineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineButtonActionPerformed
-        // TODO add your handling code here:
+        try {
+            data.answerAppointment(userID, appointmentID, -1);
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(AppointmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_declineButtonActionPerformed
+
+    private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
+        try {
+            data.answerAppointment(userID, appointmentID, 1);
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(AppointmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_acceptButtonActionPerformed
 
     /**
      * @param args the command line arguments
