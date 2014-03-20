@@ -35,7 +35,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
 
     
     
-        public void setModelApp(Appointment app){
+        public void setModelApp(Appointment appo){
         modelApp = appo;
         
         Date startdato = appo.getStartTime();
