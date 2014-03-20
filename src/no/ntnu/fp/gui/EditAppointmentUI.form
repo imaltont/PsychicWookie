@@ -410,7 +410,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="addPersonButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Legg til personer"/>
+                <Property name="text" type="java.lang.String" value="Rediger personer"/>
                 <Property name="name" type="java.lang.String" value="addPersonButton" noResource="true"/>
               </Properties>
               <Events>
@@ -514,6 +514,8 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
+                      <Component id="deleteButton" min="-2" pref="85" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="CancelButton" min="-2" pref="87" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="SaveButton" min="-2" pref="80" max="-2" attributes="0"/>
@@ -526,6 +528,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="CancelButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                       <Component id="SaveButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="deleteButton" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -548,6 +551,12 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SaveButtonActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="deleteButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Slett"/>
+                <Property name="name" type="java.lang.String" value="deleteButton" noResource="true"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>

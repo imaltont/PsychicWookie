@@ -62,6 +62,7 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
 
         RegisterButton.setText("Registrer");
         RegisterButton.setName("RegisterButton"); // NOI18N
+        RegisterButton.addActionListener(this);
 
         loginWarning.setForeground(new java.awt.Color(255, 51, 0));
         loginWarning.setText("Brukernavn eller passord er feil");
@@ -152,21 +153,16 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
 
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         if (evt.getSource() == LoginButton) {
-            try {
-                LoginUI.this.LoginButtonActionPerformed(evt);
-            } catch (SQLException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            LoginUI.this.LoginButtonActionPerformed(evt);
         }
         else if (evt.getSource() == UsernameTextField) {
             LoginUI.this.UsernameTextFieldActionPerformed(evt);
         }
         else if (evt.getSource() == loginTestButton) {
-            try {
-                LoginUI.this.loginTestButtonActionPerformed(evt);
-            } catch (SQLException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
+            LoginUI.this.loginTestButtonActionPerformed(evt);
+        }
+        else if (evt.getSource() == RegisterButton) {
+            LoginUI.this.RegisterButtonActionPerformed(evt);
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -190,6 +186,11 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
         new HomeUI(1, data).setVisible(true);
         dispose();
     }//GEN-LAST:event_loginTestButtonActionPerformed
+
+    private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed
+        new registerUI().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_RegisterButtonActionPerformed
 
     /**
      * @param args the command line arguments
