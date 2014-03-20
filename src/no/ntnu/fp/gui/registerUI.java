@@ -7,7 +7,11 @@
 package no.ntnu.fp.gui;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import no.ntnu.fp.model.Employee;
+import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  *
@@ -24,6 +28,7 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
 
     
     private Employee employee;
+    private static DatabaseHandler data;
     
     
     public void setModel(String username, String name, String mail, String password){
@@ -34,7 +39,6 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
         else{
             employee = new Employee(username, password, mail, name);
         }
-        
         
     }
     
@@ -59,8 +63,8 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
         nameTextField = new javax.swing.JTextField();
         mailTextField = new javax.swing.JTextField();
         passwordTextField = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        registerButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
         warningLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,12 +92,13 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
         passwordTextField.setName("passwordTextField"); // NOI18N
         passwordTextField.addActionListener(this);
 
-        jButton1.setText("Registrer");
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(this);
+        registerButton.setText("Registrer");
+        registerButton.setName("registerButton"); // NOI18N
+        registerButton.addActionListener(this);
 
-        jButton2.setText("Avbryt");
-        jButton2.setName("jButton2"); // NOI18N
+        cancelButton.setText("Avbryt");
+        cancelButton.setName("cancelButton"); // NOI18N
+        cancelButton.addActionListener(this);
 
         warningLabel.setForeground(new java.awt.Color(255, 0, 0));
         warningLabel.setText("Alle felt må fylles ut");
@@ -110,9 +115,9 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(warningLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1)
+                        .addComponent(registerButton)
                         .addGap(20, 20, 20))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,8 +155,8 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)))
+                            .addComponent(registerButton)
+                            .addComponent(cancelButton)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(warningLabel)))
@@ -178,8 +183,11 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
         if (evt.getSource() == passwordTextField) {
             registerUI.this.passwordTextFieldActionPerformed(evt);
         }
-        else if (evt.getSource() == jButton1) {
-            registerUI.this.jButton1ActionPerformed(evt);
+        else if (evt.getSource() == registerButton) {
+            registerUI.this.registerButtonActionPerformed(evt);
+        }
+        else if (evt.getSource() == cancelButton) {
+            registerUI.this.cancelButtonActionPerformed(evt);
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -187,10 +195,21 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordTextFieldActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void registerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerButtonActionPerformed
         setModel(usernameTextField.getText(), nameTextField.getText(), mailTextField.getText(), passwordTextField.getText());
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+        this.data = data;
+        try {
+            new HomeUI(data.getEmployeeId(usernameTextField.getText().trim()), data).setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(registerUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dispose();
+    }//GEN-LAST:event_registerButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        new LoginUI().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -228,8 +247,7 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton cancelButton;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel mailLabel;
     private javax.swing.JTextField mailTextField;
@@ -237,6 +255,7 @@ public class registerUI extends javax.swing.JFrame implements ActionListener {
     private javax.swing.JTextField nameTextField;
     private javax.swing.JLabel passwordLabel;
     private javax.swing.JTextField passwordTextField;
+    private javax.swing.JButton registerButton;
     private javax.swing.JLabel usernameLabel;
     private javax.swing.JTextField usernameTextField;
     private javax.swing.JLabel warningLabel;
