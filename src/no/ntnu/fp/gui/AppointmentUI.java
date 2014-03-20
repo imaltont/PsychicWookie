@@ -6,24 +6,36 @@
 
 package no.ntnu.fp.gui;
 
+import java.awt.event.ActionListener;
 import no.ntnu.fp.model.Appointment;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  *
  * @author Ingrid
  */
-public class AppointmentUI extends javax.swing.JPanel {
+public class AppointmentUI extends javax.swing.JPanel implements ActionListener {
 
     
     private Appointment modelApp = null;
+    private static DatabaseHandler data;
+    private static int userID;
+    private static int appointmentID;
     /**
      * Creates new form MakeAppointment
      */
-    public AppointmentUI() {
+    public AppointmentUI(int userID, DatabaseHandler data) throws SQLException {
+        this.data = data;
+        this.userID = userID;
+        this.appointmentID = data.getAppointmentId(userID);
+        setModelApp(data.getAppointment(appointmentID));
         initComponents();
     }
     
@@ -43,6 +55,11 @@ public class AppointmentUI extends javax.swing.JPanel {
         fromTextField.setText(tidFormat.format(sluttdato));
         
         //choosePlaceList
+        
+        
+        //personList
+        
+        //infoTextArea
         
       
         
@@ -74,7 +91,7 @@ public class AppointmentUI extends javax.swing.JPanel {
         personList = new javax.swing.JList();
         WhatPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        infoTextArea = new javax.swing.JTextArea();
         declineButton = new javax.swing.JButton();
         acceptButton = new javax.swing.JButton();
 
@@ -211,11 +228,11 @@ public class AppointmentUI extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setName("jTextArea1"); // NOI18N
-        jScrollPane2.setViewportView(jTextArea1);
+        infoTextArea.setEditable(false);
+        infoTextArea.setColumns(20);
+        infoTextArea.setRows(5);
+        infoTextArea.setName("infoTextArea"); // NOI18N
+        jScrollPane2.setViewportView(infoTextArea);
 
         javax.swing.GroupLayout WhatPanelLayout = new javax.swing.GroupLayout(WhatPanel);
         WhatPanel.setLayout(WhatPanelLayout);
@@ -237,10 +254,12 @@ public class AppointmentUI extends javax.swing.JPanel {
         declineButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         declineButton.setText("Avslå");
         declineButton.setName("declineButton"); // NOI18N
+        declineButton.addActionListener(this);
 
         acceptButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         acceptButton.setText("Godta");
         acceptButton.setName("acceptButton"); // NOI18N
+        acceptButton.addActionListener(this);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -285,7 +304,33 @@ public class AppointmentUI extends javax.swing.JPanel {
         );
 
         getAccessibleContext().setAccessibleDescription("");
+    }
+
+    // Code for dispatching events from components to event handlers.
+
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        if (evt.getSource() == acceptButton) {
+            AppointmentUI.this.acceptButtonActionPerformed(evt);
+        }
+        else if (evt.getSource() == declineButton) {
+            AppointmentUI.this.declineButtonActionPerformed(evt);
+        }
     }// </editor-fold>//GEN-END:initComponents
+
+    private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
+        try {
+            data.answerAppointment(userID, appointmentID, 1);
+        } catch (SQLException ex) {
+            Logger.getLogger(AppointmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_acceptButtonActionPerformed
+
+    private void declineButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineButtonActionPerformed
+        try {
+            data.answerAppointment(userID, appointmentID, -1);
+        } catch (SQLException ex) {
+            Logger.getLogger(AppointmentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }    }//GEN-LAST:event_declineButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -301,9 +346,9 @@ public class AppointmentUI extends javax.swing.JPanel {
     private javax.swing.JButton declineButton;
     private javax.swing.JLabel fromLabel;
     private javax.swing.JTextField fromTextField;
+    private javax.swing.JTextArea infoTextArea;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lineLabel;
     private javax.swing.JList personList;
     private javax.swing.JLabel toLabel;
