@@ -1,14 +1,14 @@
 package no.ntnu.fp.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 public class Alarm {
 	private int id;
     private int appointmentID;
 	private String message;
-	private Date time;
-	
-	public Alarm(String m, Date d, int appointmentID){
+	private Timestamp time;
+
+	public Alarm(String m, Timestamp d, int appointmentID){
 		message=m;
 		time=d;
         this.appointmentID = appointmentID;
@@ -30,11 +30,11 @@ public class Alarm {
 		this.message = message;
 	}
 
-	public Date getTime() {
+	public Timestamp getTime() {
 		return time;
 	}
 
-	public void setTime(Date time) {
+	public void setTime(Timestamp time) {
 		this.time = time;
 	}
 

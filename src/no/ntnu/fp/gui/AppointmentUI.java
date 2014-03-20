@@ -6,16 +6,16 @@
 
 package no.ntnu.fp.gui;
 
-import java.awt.event.ActionListener;
 import no.ntnu.fp.model.Appointment;
+import no.ntnu.fp.storage.DatabaseHandler;
 
-import java.sql.Date;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  *
@@ -41,9 +41,9 @@ public class AppointmentUI extends javax.swing.JPanel implements ActionListener 
     
     public void setModelApp(Appointment app){
         modelApp = app;
-        
-        Date startdato = app.getStartTime();
-        Date sluttdato = app.getEndTime();
+
+        Timestamp startdato = app.getStartTime();
+        Timestamp sluttdato = app.getEndTime();
         
         //setter datoen.
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");

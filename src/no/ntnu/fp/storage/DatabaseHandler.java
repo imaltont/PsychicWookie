@@ -117,7 +117,7 @@ public class DatabaseHandler
             PreparedStatement query = this.db.prepareStatement("INSERT INTO varsel (varselid, tidspunkt, melding, avtaleid) VALUES (?,?,?,?)");
 
             query.setInt(1, id);
-            query.setDate(2, (java.sql.Date) time);
+            query.setTimestamp(2, (Timestamp) time);
             query.setString(3, message);
             query.setInt(4, appointmentId);
             query.executeUpdate();
@@ -138,8 +138,8 @@ public class DatabaseHandler
 
             query.setInt(1, id);
             query.setString(2, getLocationName(placeId));
-            query.setDate(3, (java.sql.Date) starteDate);
-            query.setDate(4, (java.sql.Date) endDate);
+            query.setTimestamp(3, (Timestamp) starteDate);
+            query.setTimestamp(4, (Timestamp) endDate);
             query.setString(5, description);
             query.setInt(6, ownerId);
             query.executeUpdate();
@@ -227,28 +227,26 @@ public class DatabaseHandler
 
     }
 
-    public boolean locationIsAvailable (String roomnr, java.sql.Date startDate, java.sql.Date endDate) throws SQLException {
+    public boolean locationIsAvailable (String roomnr, Timestamp startDate, Timestamp endDate) throws SQLException {
         for (int i = 1; i <= getNextAutoIncrement("avtale"); i++)
         {
-            if (getAppointment(i) == null)
-            {
-
-            }
-            else
+            if (!(getAppointment(i) == null))
             {
                 for (int y = 1; y <= getNextAutoIncrement("sted"); y++)
                 {
-                    if ((getLocationAppointmentId(roomnr, y) != 0) && (getAppointment(i).getStartTime().equals(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime())))
+                    if ((getLocationAppointmentId(roomnr, y) != 0))
                     {
-                          return false;
-                    }
-                    else if ((getLocationAppointmentId(roomnr, y) != 0) && getAppointment(i).getStartTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()) && getAppointment(i).getEndTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()))
-                    {
-                        return false;
-                    }
-                    else if ((getLocationAppointmentId(roomnr, y) != 0) && getAppointment(i).getStartTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()) && getAppointment(i).getEndTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()))
-                    {
-                        return false;
+                        System.out.println(getAppointment(i).getLocation());
+                        if (getAppointment(i).getStartTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()) && getAppointment(i).getStartTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()))
+                        {
+                            System.out.println("andre");
+                            return false;
+                        }
+                        else if (getAppointment(i).getEndTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()) && getAppointment(i).getEndTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()))
+                        {
+                            System.out.println("tredje");
+                            return false;
+                        }
                     }
                 }
             }
@@ -270,13 +268,6 @@ public class DatabaseHandler
         return rs.getByte("avtaleid");
     }
 
-    public Location getLocationAvailable(String roomnr, int numberOfSeats, java.sql.Date endDate, java.sql.Date startDate) throws SQLException {
-            if (getLocation(roomnr).isAvailable(startDate, endDate, numberOfSeats))
-            {
-               return getLocation(roomnr);
-            }
-        return null;
-    }
 
     public String getLocationName(int placeId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT romnr FROM sted WHERE id = ?");
@@ -296,7 +287,7 @@ public class DatabaseHandler
         return getNextAutoIncrement("sted");
     }
 
-    public int addAppointmentCustomPlace (String place, Date starteDate, Date endDate, String description, int ownerId)
+    public int addAppointmentCustomPlace (String place, Timestamp starteDate, Timestamp endDate, String description, int ownerId)
     {
         try {
             int id = getNextAutoIncrement ("avtale");
@@ -305,8 +296,8 @@ public class DatabaseHandler
 
             query.setInt(1, id);
             query.setString(2, place);
-            query.setDate(3, (java.sql.Date) starteDate);
-            query.setDate(4, (java.sql.Date) endDate);
+            query.setTimestamp(3, (Timestamp) starteDate);
+            query.setTimestamp(4, (Timestamp) endDate);
             query.setString(5, description);
             query.setInt(6, ownerId);
             query.executeUpdate();
@@ -318,8 +309,14 @@ public class DatabaseHandler
         }
     }
 
-    public void updateAppointment ()
-    {
+    public void updateAppointment (int appointmentid, String description,String location, Timestamp startDate, Timestamp endDate) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement("UPDATE avtale SET beskrivelse, sted, starttid, sluttid VALUES (?,?,?,?) WHERE id = ?");
+        query.setString(1, description);
+        query.setString(2, location);
+        query.setTimestamp(3, startDate);
+        query.setTimestamp(4, endDate);
+        query.setInt(5, appointmentid);
+        query.executeUpdate();
 
     }
 
@@ -357,10 +354,10 @@ public class DatabaseHandler
 
         if (rs.getString("sted") == null)
         {
-            return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("c_sted"), rs.getString("beskrivelse"), rs.getInt("eierid"));
+            return new Appointment (rs.getTimestamp("starttid"), rs.getTimestamp("sluttid"), rs.getString("c_sted"), rs.getString("beskrivelse"), rs.getInt("eierid"));
         }
 
-        return new Appointment (rs.getDate("starttid"), rs.getDate("sluttid"), rs.getString("sted"), rs.getString("beskrivelse"), rs.getInt("eierid"));
+        return new Appointment (rs.getTimestamp("starttid"), rs.getTimestamp("sluttid"), rs.getString("sted"), rs.getString("beskrivelse"), rs.getInt("eierid"));
     }
 
     public int getAppointmentId (int eierid) throws SQLException {
@@ -401,7 +398,7 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Alarm (rs.getString("melding"), rs.getDate("tidspunkt"), appointmentId);
+        return new Alarm (rs.getString("melding"), rs.getTimestamp("tidspunkt"), appointmentId);
     }
 
     public Group getGroup (int id) throws SQLException {

@@ -8,17 +8,17 @@ package no.ntnu.fp.gui;
 
 import no.ntnu.fp.model.Appointment;
 import no.ntnu.fp.model.Employee;
+import no.ntnu.fp.storage.DatabaseHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import no.ntnu.fp.storage.DatabaseHandler;
 
 /**
  * 
@@ -49,9 +49,9 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
     
         public void setModelApp(Appointment appo){
         modelApp = appo;
-        
-        Date startdato = appo.getStartTime();
-        Date sluttdato = appo.getEndTime();
+
+         Timestamp startdato = appo.getStartTime();
+         Timestamp sluttdato = appo.getEndTime();
         
         //setter datoen.
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -386,7 +386,12 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AppointmentDialogUI dialog = new AppointmentDialogUI(new javax.swing.JFrame(), true);
+                AppointmentDialogUI dialog = null;
+                try {
+                    dialog = new AppointmentDialogUI(new JFrame(), true, userID, data);
+                } catch (SQLException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

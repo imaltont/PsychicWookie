@@ -1,14 +1,14 @@
 package no.ntnu.fp.model;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 
 
 public class Appointment {
 	private int id;
-	private Date startTime;
-	private Date endTime;
+	private Timestamp startTime;
+	private Timestamp endTime;
 	private String location;
 	private Location location2;
 	private ArrayList <Employee> participants;
@@ -16,7 +16,7 @@ public class Appointment {
 	private int owner;
 	private Alarm alarm;
 	//Constructor
-	public Appointment(Date sT, Date eT, String l, String m, int o){
+	public Appointment(Timestamp sT, Timestamp eT, String l, String m, int o){
 		participants = new ArrayList <Employee>();
 		startTime = sT;
 		endTime = eT;
@@ -38,16 +38,16 @@ public class Appointment {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public Date getStartTime() {
+	public Timestamp getStartTime() {
 		return startTime;
 	}
-	public void setStartTime(Date startTime) {
+	public void setStartTime(Timestamp startTime) {
 		this.startTime = startTime;
 	}
-	public Date getEndTime() {
+	public Timestamp getEndTime() {
 		return endTime;
 	}
-	public void setEndTime(Date endTime) {
+	public void setEndTime(Timestamp endTime) {
 		this.endTime = endTime;
 	}
 	public String getLocation() {

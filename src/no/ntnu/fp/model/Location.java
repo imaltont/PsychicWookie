@@ -1,7 +1,6 @@
 package no.ntnu.fp.model;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class Location {
@@ -9,7 +8,7 @@ public class Location {
 	private String name;
 	private ArrayList <Appointment> reserved;
 	//Logic
-	public boolean isAvailable(Date startTime, Date endTime, int numberOfParticipants){
+	public boolean isAvailable(Timestamp startTime, Timestamp endTime, int numberOfParticipants){
 		int i=0;
 		if(numberOfParticipants>numberOfSeats){
 			return false;
