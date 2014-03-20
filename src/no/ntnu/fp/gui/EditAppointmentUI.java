@@ -9,6 +9,7 @@ package no.ntnu.fp.gui;
 import no.ntnu.fp.storage.DatabaseHandler;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -410,10 +411,18 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
             EditAppointmentUI.this.writePlaceTextFieldActionPerformed(evt);
         }
         else if (evt.getSource() == addPersonButton) {
-            EditAppointmentUI.this.addPersonButtonActionPerformed(evt);
+            try {
+                EditAppointmentUI.this.addPersonButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == CancelButton) {
-            EditAppointmentUI.this.CancelButtonActionPerformed(evt);
+            try {
+                EditAppointmentUI.this.CancelButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == SaveButton) {
             EditAppointmentUI.this.SaveButtonActionPerformed(evt);
@@ -422,6 +431,11 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
             EditAppointmentUI.this.deleteButtonActionPerformed(evt);
         }
     }// </editor-fold>//GEN-END:initComponents
+
+    private void SaveButtonActionPerformed(ActionEvent evt) {
+
+
+    }
 
     private void writePlaceTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_writePlaceTextFieldActionPerformed
         // TODO add your handling code here:

@@ -220,6 +220,16 @@ public class DatabaseHandler
 
     }
 
+
+
+    public Location getLocationAvailable(String roomnr, int numberOfSeats, java.sql.Date endDate, java.sql.Date startDate) throws SQLException {
+            if (getLocation(roomnr).isAvailable(startDate, endDate, numberOfSeats))
+            {
+               return getLocation(roomnr);
+            }
+        return null;
+    }
+
     public String getLocationName(int placeId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT romnr FROM sted WHERE id = ?");
         query.setInt(1, placeId);
@@ -314,9 +324,9 @@ public class DatabaseHandler
         return rs.getInt("avtaleid");
     }
 
-    public Location getLocation (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement ("SELECT romnr, antallplasser FROM sted WHERE id = ?");
-        query.setInt(1, id);
+    public Location getLocation (String roomnr) throws SQLException {
+        PreparedStatement query = this.db.prepareStatement ("SELECT antallplasser FROM sted WHERE romnr = ?");
+        query.setString(1, roomnr);
         ResultSet rs = query.executeQuery();
 
         if (!rs.next())
@@ -324,7 +334,7 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Location (rs.getString("romnr"), rs.getInt("antallplasser"));
+        return new Location (roomnr, rs.getInt("antallplasser"));
     }
 
     public Alarm getAlarm (int id, int appointmentId) throws SQLException {

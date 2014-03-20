@@ -58,6 +58,13 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionLi
         initComponents();
     }
 
+    public AddEmployeeDialogUI(EditAppointmentUI parent, boolean modal, DatabaseHandler data, EditAppointmentUI editAppointmentUI, DefaultListModel invitedListModel) throws SQLException {
+
+        super(parent, modal);
+        this.data = data;
+        initComponents();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
