@@ -22,16 +22,25 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionLi
 
     private DefaultListModel employeeListModel = new DefaultListModel();
     private DefaultListModel invitedListModel = new DefaultListModel();
+    private DefaultListModel personListModel;
     private static DatabaseHandler data;
     private static MakeAppointmentUI dialogUI;
 
     /**
      * Creates new form AddEmployeeDialogUI
      */
-    public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, MakeAppointmentUI dialog) throws SQLException {
+    public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, MakeAppointmentUI dialog, DefaultListModel personListModel) throws SQLException {
         super(parent, modal);
         this.data = data;
         this.dialogUI = dialog;
+        this.personListModel = personListModel;
+        initComponents();
+    }
+public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, MakeAppointmentUI dialog) throws SQLException {
+        super(parent, modal);
+        this.data = data;
+        this.dialogUI = dialog;
+        this.personListModel = personListModel;
         initComponents();
     }
 
@@ -61,11 +70,19 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionLi
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        for (int i = 1; i < data.getNumberOfEmployees(); i++)
+        {
+            if (personListModel.contains(data.getEmployee(i).getUsername()))
+            {
+                invitedListModel.addElement(data.getEmployee(i).getUsername());
+            }
+            else
+            {
+                employeeListModel.addElement(data.getEmployee(i).getUsername());
+            }
+        }
+
         employeeList.setName("employeeList"); // NOI18N
-        String test = data.getEmployee(1).getName();
-        employeeListModel.addElement(test);
-        test = data.getEmployee(7).getName();
-        employeeListModel.addElement(test);
         jScrollPane1.setViewportView(employeeList);
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
@@ -232,14 +249,33 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionLi
         }
         else if (e.getSource() == saveButton)
         {
-            AddEmployeeDialogUI.this.saveButtonActionPerformed(e);
+            try {
+                AddEmployeeDialogUI.this.saveButtonActionPerformed(e);
+            } catch (SQLException e1) {
+                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
     }
 
-    private void saveButtonActionPerformed(ActionEvent e) {
-         dialogUI.setInvitedListModel(invitedListModel);
+    private void saveButtonActionPerformed(ActionEvent e) throws SQLException {
+
+        DefaultListModel addParticipants = new DefaultListModel();
+        for (int i = 1; i < data.getNumberOfEmployees(); i++)
+        {
+            if (invitedListModel.contains(data.getEmployee(i).getUsername()) && !personListModel.contains(data.getEmployee(i).getUsername()))
+            {
+                addParticipants.addElement(data.getEmployee(i).getUsername());
+            }
+            else if (personListModel.contains(data.getEmployee(i).getUsername()) && !invitedListModel.contains(data.getEmployee(i).getUsername()))
+            {
+                dialogUI.removeInvitedListElement (data.getEmployee(i).getUsername());
+            }
+
+        }
+        dialogUI.setInvitedListModel(addParticipants);
         dispose();
-    }
+        }
+
 
     private void removeButtonActionPerformed(ActionEvent e) {
         employeeListModel.addElement(invitedList.getSelectedValue());
