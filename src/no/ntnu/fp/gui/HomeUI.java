@@ -252,46 +252,48 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     // Code for dispatching events from components to event handlers.
 
     public void actionPerformed(java.awt.event.ActionEvent evt) {
-<<<<<<< HEAD
         if (evt.getSource() == logoutButton) {
-            HomeUI.this.logoutButtonActionPerformed(evt);
-        }
-        else if (evt.getSource() == otherCalendarsButton) {
-            HomeUI.this.otherCalendarsButtonActionPerformed(evt);
-        }
-        else if (evt.getSource() == makeAppointmentButton) {
-            HomeUI.this.makeAppointmentButtonActionPerformed(evt);
-=======
-        if (evt.getSource() == makeAppointmentButton) {
             try {
-                HomeUI.this.makeAppointmentButtonActionPerformed(evt);
+                HomeUI.this.logoutButtonActionPerformed(evt);
             } catch (SQLException e) {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
->>>>>>> 6937610c8f466ecb5d6ae212fa38306ac6060500
         }
-        else if (evt.getSource() == LastWeek) {
-            HomeUI.this.LastWeekActionPerformed(evt);
+        else if (evt.getSource() == otherCalendarsButton) {
+            try {
+                HomeUI.this.otherCalendarsButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
-    }// </editor-fold>//GEN-END:initComponents
+        else {
+            if (evt.getSource() == makeAppointmentButton) {
+                try {
+                    HomeUI.this.makeAppointmentButtonActionPerformed(evt);
+                } catch (SQLException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+                else if (evt.getSource() == LastWeek) {
+                    HomeUI.this.LastWeekActionPerformed(evt);
+                }
+            // </editor-fold>//GEN-END:initComponents
+        }
+    }
 
     private void LastWeekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LastWeekActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_LastWeekActionPerformed
 
-<<<<<<< HEAD
-    private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
- 
-=======
+
     private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
->>>>>>> 6937610c8f466ecb5d6ae212fa38306ac6060500
         new MakeAppointmentUI(userID, data).setVisible(true);
         dispose();
 
         
     }//GEN-LAST:event_makeAppointmentButtonActionPerformed
 
-    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
+    private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_logoutButtonActionPerformed
         MakeAppointmentUI makeApp = new MakeAppointmentUI(userID, data);
         this.getContentPane().add(makeApp);
         makeApp.setVisible(true);
@@ -301,8 +303,8 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         
     }//GEN-LAST:event_logoutButtonActionPerformed
 
-    private void otherCalendarsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherCalendarsButtonActionPerformed
-        new AddEmployeeDialogUI(this, false).setVisible(true);
+    private void otherCalendarsButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_otherCalendarsButtonActionPerformed
+        new AddEmployeeDialogUI(this, false, data).setVisible(true);
     }//GEN-LAST:event_otherCalendarsButtonActionPerformed
 
     /**

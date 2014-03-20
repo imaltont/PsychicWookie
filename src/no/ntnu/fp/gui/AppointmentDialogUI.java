@@ -6,14 +6,15 @@
 
 package no.ntnu.fp.gui;
 
+import no.ntnu.fp.model.Appointment;
+import no.ntnu.fp.model.Employee;
+
+import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import javax.swing.DefaultListModel;
-import no.ntnu.fp.model.Appointment;
-import no.ntnu.fp.model.Employee;
 
 /**
  * 
@@ -22,7 +23,7 @@ import no.ntnu.fp.model.Employee;
  */
 public class AppointmentDialogUI extends javax.swing.JDialog implements ActionListener {
 
-        private Appointment modelApp = null;
+        private Appointment modelApp;
     
     
     /**
@@ -42,7 +43,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
         Date sluttdato = appo.getEndTime();
         
         //setter datoen.
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateTextField.setText(dateFormat.format(startdato));
                 
         //setter startTid
@@ -133,7 +134,7 @@ public class AppointmentDialogUI extends javax.swing.JDialog implements ActionLi
 
         dateTextField.setEditable(false);
         dateTextField.setFont(new java.awt.Font("Tahoma", 0, 17)); // NOI18N
-        dateTextField.setText("dd/mm/yy");
+        dateTextField.setText("yyyy/MM/dd");
         dateTextField.setName("dateTextField"); // NOI18N
 
         javax.swing.GroupLayout WhenPanelLayout = new javax.swing.GroupLayout(WhenPanel);
