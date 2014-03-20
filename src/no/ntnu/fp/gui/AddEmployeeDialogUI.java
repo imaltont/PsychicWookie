@@ -6,17 +6,32 @@
 
 package no.ntnu.fp.gui;
 
+import no.ntnu.fp.storage.DatabaseHandler;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+
 /**
  *
  * @author Ingrid
  */
-public class AddEmployeeDialogUI extends javax.swing.JDialog {
+public class AddEmployeeDialogUI extends javax.swing.JDialog implements ActionListener {
+
+
+    private DefaultListModel employeeListModel = new DefaultListModel();
+    private DefaultListModel invitedListModel = new DefaultListModel();
+    private static DatabaseHandler data;
+    private static MakeAppointmentUI dialogUI;
 
     /**
      * Creates new form AddEmployeeDialogUI
      */
-    public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal) {
+    public AddEmployeeDialogUI(java.awt.Frame parent, boolean modal, DatabaseHandler data, MakeAppointmentUI dialog) throws SQLException {
         super(parent, modal);
+        this.data = data;
+        this.dialogUI = dialog;
         initComponents();
     }
 
@@ -27,12 +42,14 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws SQLException {
 
+        employeeListModel = new DefaultListModel();
+        invitedListModel = new DefaultListModel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        employeeList = new javax.swing.JList();
+        employeeList = new javax.swing.JList(employeeListModel);
         jScrollPane2 = new javax.swing.JScrollPane();
-        invitedList = new javax.swing.JList();
+        invitedList = new javax.swing.JList(invitedListModel);
         inviteButton = new javax.swing.JButton();
         removeButton = new javax.swing.JButton();
         employeeLabel = new javax.swing.JLabel();
@@ -45,6 +62,10 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         employeeList.setName("employeeList"); // NOI18N
+        String test = data.getEmployee(1).getName();
+        employeeListModel.addElement(test);
+        test = data.getEmployee(7).getName();
+        employeeListModel.addElement(test);
         jScrollPane1.setViewportView(employeeList);
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
@@ -54,9 +75,11 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
 
         inviteButton.setText(">Inviter>");
         inviteButton.setName("inviteButton"); // NOI18N
+        inviteButton.addActionListener(this);
 
         removeButton.setText("<Fjern<");
         removeButton.setName("removeButton"); // NOI18N
+        removeButton.addActionListener(this);
 
         employeeLabel.setText("Ansatte:");
         employeeLabel.setName("employeeLabel"); // NOI18N
@@ -66,9 +89,11 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
 
         saveButton.setText("Lagre");
         saveButton.setName("saveButton"); // NOI18N
+        saveButton.addActionListener(this);
 
         cancelButton.setText("Avbryt");
         cancelButton.setName("cancelButton"); // NOI18N
+        cancelButton.addActionListener(this);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,6 +152,10 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void inviteButtonActionListener() {
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -157,7 +186,12 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                AddEmployeeDialogUI dialog = new AddEmployeeDialogUI(new javax.swing.JFrame(), true);
+                AddEmployeeDialogUI dialog = null;
+                try {
+                    dialog = new AddEmployeeDialogUI(new JFrame(), true, data, dialogUI);
+                } catch (SQLException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -180,5 +214,41 @@ public class AddEmployeeDialogUI extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton removeButton;
     private javax.swing.JButton saveButton;
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        //To change body of implemented methods use File | Settings | File Templates.
+        if (e.getSource() == inviteButton)
+        {
+            AddEmployeeDialogUI.this.inviteButtonActionPerformed(e);
+        }
+        else if (e.getSource() == removeButton)
+        {
+            AddEmployeeDialogUI.this.removeButtonActionPerformed(e);
+        }
+        else if (e.getSource() == cancelButton)
+        {
+            dispose();
+        }
+        else if (e.getSource() == saveButton)
+        {
+            AddEmployeeDialogUI.this.saveButtonActionPerformed(e);
+        }
+    }
+
+    private void saveButtonActionPerformed(ActionEvent e) {
+         dialogUI.setInvitedListModel(invitedListModel);
+        dispose();
+    }
+
+    private void removeButtonActionPerformed(ActionEvent e) {
+        employeeListModel.addElement(invitedList.getSelectedValue());
+        invitedListModel.removeElement(invitedList.getSelectedValue());
+    }
+
+    private void inviteButtonActionPerformed(ActionEvent e) {
+        invitedListModel.addElement(employeeList.getSelectedValue());
+        employeeListModel.removeElement(employeeList.getSelectedValue());
+    }
     // End of variables declaration//GEN-END:variables
 }

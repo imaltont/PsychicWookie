@@ -162,7 +162,11 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
             LoginUI.this.UsernameTextFieldActionPerformed(evt);
         }
         else if (evt.getSource() == loginTestButton) {
-            //LoginUI.this.loginTestButtonActionPerformed(evt);
+            try {
+                LoginUI.this.loginTestButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -170,7 +174,7 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
         String user= UsernameTextField.getText();
         String pwd= new String (passwordTextField.getPassword());
         if (data.authenticate(user, pwd)!= (-1)){
-            new HomeUI(data.authenticate(user, pwd)).setVisible(true);
+            new HomeUI(data.authenticate(user, pwd), data).setVisible(true);
         }
         else{
             UsernameTextField.setText("Feil brukernavn og/eller passord");
@@ -182,11 +186,11 @@ public class LoginUI extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_UsernameTextFieldActionPerformed
 
-   /* private void loginTestButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginTestButtonActionPerformed
-        new HomeUI().setVisible(true);
+    private void loginTestButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_loginTestButtonActionPerformed
+        new HomeUI(1, data).setVisible(true);
         dispose();
     }//GEN-LAST:event_loginTestButtonActionPerformed
-      */
+
     /**
      * @param args the command line arguments
      */

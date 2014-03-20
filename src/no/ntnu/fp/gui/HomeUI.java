@@ -24,10 +24,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
 
     private static int userID;
     private Employee user;
-    private DatabaseHandler data;
+    private static DatabaseHandler data;
 
-    public HomeUI(int userID) throws SQLException {
-        data = new DatabaseHandler();
+
+    public HomeUI(int userID, DatabaseHandler data) throws SQLException {
+        this.data = data;
         this.userID = userID;
         user = data.getEmployee(userID);
         initComponents();
@@ -251,17 +252,17 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     // Code for dispatching events from components to event handlers.
 
     public void actionPerformed(java.awt.event.ActionEvent evt) {
-        if (evt.getSource() == makeAppointmentButton) {
-            HomeUI.this.makeAppointmentButtonActionPerformed(evt);
-        }
-        else if (evt.getSource() == LastWeek) {
-            HomeUI.this.LastWeekActionPerformed(evt);
-        }
-        else if (evt.getSource() == logoutButton) {
+        if (evt.getSource() == logoutButton) {
             HomeUI.this.logoutButtonActionPerformed(evt);
         }
         else if (evt.getSource() == otherCalendarsButton) {
             HomeUI.this.otherCalendarsButtonActionPerformed(evt);
+        }
+        else if (evt.getSource() == makeAppointmentButton) {
+            HomeUI.this.makeAppointmentButtonActionPerformed(evt);
+        }
+        else if (evt.getSource() == LastWeek) {
+            HomeUI.this.LastWeekActionPerformed(evt);
         }
     }// </editor-fold>//GEN-END:initComponents
 
@@ -270,16 +271,15 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
     }//GEN-LAST:event_LastWeekActionPerformed
 
     private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
-        this.removeAll();
-        this.add(new MakeAppointmentPanelUI());
-        
-        //new MakeAppointmentUI().setVisible(true);
-        //dispose();
+ 
+        new MakeAppointmentUI(userID, data).setVisible(true);
+        dispose();
+
         
     }//GEN-LAST:event_makeAppointmentButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-        MakeAppointmentUI makeApp = new MakeAppointmentUI();
+        MakeAppointmentUI makeApp = new MakeAppointmentUI(userID, data);
         this.getContentPane().add(makeApp);
         makeApp.setVisible(true);
         setVisible(false);
@@ -323,7 +323,7 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new HomeUI(userID).setVisible(true);
+                    new HomeUI(userID, data).setVisible(true);
                 } catch (SQLException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
