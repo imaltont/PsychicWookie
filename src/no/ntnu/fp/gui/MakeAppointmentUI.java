@@ -24,8 +24,9 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     private static int userID;
     private static DatabaseHandler data;
     private DefaultListModel invitedListModel;
+    private DefaultListModel roomListModel;
 
-    public MakeAppointmentUI(int userID, DatabaseHandler data) {
+    public MakeAppointmentUI(int userID, DatabaseHandler data) throws SQLException {
         this.data = data;
         this.userID = userID;
         initComponents();
@@ -38,8 +39,9 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents() throws SQLException {
         invitedListModel = new DefaultListModel();
+        roomListModel = new DefaultListModel();
         jPanel1 = new javax.swing.JPanel();
         WhenPanel = new javax.swing.JPanel();
         dateChooserCombo = new datechooser.beans.DateChooserCombo();
@@ -57,7 +59,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         writePlaceTextField = new javax.swing.JTextField();
         writePlaceLabel = new javax.swing.JLabel();
         choosePlaceScrollPane = new javax.swing.JScrollPane();
-        choosePlaceList = new javax.swing.JList();
+        choosePlaceList = new javax.swing.JList(roomListModel);
         choosePlaceLabel = new javax.swing.JLabel();
         WhomPanel = new javax.swing.JPanel();
         addPersonButton = new javax.swing.JButton();
@@ -181,11 +183,11 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
 
         choosePlaceScrollPane.setName("choosePlaceScrollPane"); // NOI18N
 
-        choosePlaceList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+
+        for (int i = 1; i < data.getNumberOfPlaces(); i++)
+        {
+            roomListModel.addElement(data.getLocation(i).getName());
+        }
         choosePlaceList.setName("choosePlaceList"); // NOI18N
         choosePlaceScrollPane.setViewportView(choosePlaceList);
 
@@ -382,7 +384,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
     }//GEN-LAST:event_writePlaceTextFieldActionPerformed
 
     private void addPersonButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_addPersonButtonActionPerformed
-        new AddEmployeeDialogUI(this, false, data, this).setVisible(true);
+        new AddEmployeeDialogUI(this, false, data, this, invitedListModel).setVisible(true);
     }//GEN-LAST:event_addPersonButtonActionPerformed
 
     private void CancelButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_CancelButtonActionPerformed
@@ -421,7 +423,11 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MakeAppointmentUI(userID, data).setVisible(true);
+                try {
+                    new MakeAppointmentUI(userID, data).setVisible(true);
+                } catch (SQLException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
         });
     }
@@ -465,6 +471,11 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         {
             this.invitedListModel.addElement(invitedListModel.elementAt(i));
         }
+    }
+
+    public void removeInvitedListElement (Object element)
+    {
+        this.invitedListModel.removeElement(element);
     }
     // End of variables declaration//GEN-END:variables
 }

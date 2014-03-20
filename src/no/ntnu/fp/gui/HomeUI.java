@@ -247,7 +247,11 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
 
     public void actionPerformed(java.awt.event.ActionEvent evt) {
         if (evt.getSource() == makeAppointmentButton) {
-            HomeUI.this.makeAppointmentButtonActionPerformed(evt);
+            try {
+                HomeUI.this.makeAppointmentButtonActionPerformed(evt);
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
         else if (evt.getSource() == LastWeek) {
             HomeUI.this.LastWeekActionPerformed(evt);
@@ -258,7 +262,7 @@ public class HomeUI extends javax.swing.JFrame implements ActionListener {
         // TODO add your handling code here:
     }//GEN-LAST:event_LastWeekActionPerformed
 
-    private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
+    private void makeAppointmentButtonActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_makeAppointmentButtonActionPerformed
         new MakeAppointmentUI(userID, data).setVisible(true);
         dispose();
         

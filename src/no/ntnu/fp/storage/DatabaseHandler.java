@@ -190,6 +190,10 @@ public class DatabaseHandler
 
     }
 
+    public int getNumberOfEmployees () throws SQLException {
+        return getNextAutoIncrement("ansatt");
+    }
+
     public void answerAppointment (int employeeId, int appointmentId, int answer) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("UPDATE invitert_avtale SET skal_komme = ? WHERE ansattid = ? AND avtaleid = ?");
         query.setInt(1, answer);
@@ -216,7 +220,7 @@ public class DatabaseHandler
 
     }
 
-    private String getLocationName(int placeId) throws SQLException {
+    public String getLocationName(int placeId) throws SQLException {
         PreparedStatement query = this.db.prepareStatement("SELECT romnr FROM sted WHERE id = ?");
         query.setInt(1, placeId);
         ResultSet rs = query.executeQuery();
@@ -228,6 +232,10 @@ public class DatabaseHandler
 
         return rs.getString("romnr");
 
+    }
+
+    public int getNumberOfPlaces () throws SQLException {
+        return getNextAutoIncrement("sted");
     }
 
     public int addAppointmentCustomPlace (String place, Date starteDate, Date endDate, String description, int ownerId)
@@ -307,7 +315,7 @@ public class DatabaseHandler
     }
 
     public Location getLocation (int id) throws SQLException {
-        PreparedStatement query = this.db.prepareStatement ("SELECT romnr, antplasser FROM sted WHERE id = ?");
+        PreparedStatement query = this.db.prepareStatement ("SELECT romnr, antallplasser FROM sted WHERE id = ?");
         query.setInt(1, id);
         ResultSet rs = query.executeQuery();
 
@@ -316,7 +324,7 @@ public class DatabaseHandler
             return null;
         }
 
-        return new Location (rs.getString("romnr"), rs.getInt("antplasser"));
+        return new Location (rs.getString("romnr"), rs.getInt("antallplasser"));
     }
 
     public Alarm getAlarm (int id, int appointmentId) throws SQLException {
