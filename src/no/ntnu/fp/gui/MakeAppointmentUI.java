@@ -32,6 +32,7 @@ public class MakeAppointmentUI extends javax.swing.JFrame implements ActionListe
         this.data = data;
         this.userID = userID;
         initComponents();
+        validate();
     }
 
     /**
