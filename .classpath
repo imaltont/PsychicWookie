@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="src/|src/test/" kind="src" path=""/>
-	<classpathentry excluding="test/" kind="src" path="src"/>
+	<classpathentry excluding="test/" kind="src" path="src">
+		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Sondre/Documents/javax.mail.jar"/>
 	<classpathentry kind="lib" path="lib/DateChooser.jar"/>
 	<classpathentry kind="lib" path="lib/FellesprosjektGUI.jar" sourcepath="lib/FellesprosjektGUI.jar"/>
 	<classpathentry kind="output" path="bin"/>
