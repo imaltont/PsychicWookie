@@ -232,17 +232,22 @@ public class DatabaseHandler
         {
             if (!(getAppointment(i) == null))
             {
-                for (int y = 1; y <= getNextAutoIncrement("sted"); y++)
-                {
-                    if ((getLocationAppointmentId(roomnr, y) != 0))
+                    if (getAppointment(i).getLocation().equals(roomnr))
                     {
                         System.out.println(getAppointment(i).getLocation());
-                        if (getAppointment(i).getStartTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()) && getAppointment(i).getStartTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()))
+                        System.out.println(getAppointment(i).getStartTime());
+                        System.out.println(startDate);
+                        if (getAppointment(i).getStartTime().equals(startDate))
+                        {
+                            System.out.println("første");
+                            return false;
+                        }
+                        else if (startDate.before(getAppointment(i).getStartTime()) && endDate.after(getAppointment(i).getStartTime()))
                         {
                             System.out.println("andre");
                             return false;
                         }
-                        else if (getAppointment(i).getEndTime().before(getAppointment(getLocationAppointmentId(roomnr, y)).getEndTime()) && getAppointment(i).getEndTime().after(getAppointment(getLocationAppointmentId(roomnr, y)).getStartTime()))
+                        else if (startDate.before(getAppointment(i).getEndTime()) && startDate.after(getAppointment(i).getStartTime()))
                         {
                             System.out.println("tredje");
                             return false;
@@ -250,7 +255,6 @@ public class DatabaseHandler
                     }
                 }
             }
-        }
         return true;
     }
 

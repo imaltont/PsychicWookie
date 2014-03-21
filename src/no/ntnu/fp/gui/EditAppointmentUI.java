@@ -12,8 +12,10 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,10 +32,14 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
     private static DatabaseHandler data;
     private DefaultListModel invitedListModel;
     private DefaultListModel roomListModel;
+    private static int appointmentId;
+    private String startDate;
+    private String endDate;
 
-    public EditAppointmentUI(int userID, DatabaseHandler data) throws SQLException {
+    public EditAppointmentUI(int userID, DatabaseHandler data, int appointmentId) throws SQLException {
         this.data = data;
         this.userID = userID;
+        this.appointmentId = appointmentId;
         initComponents();
         validate();
     }
@@ -45,8 +51,9 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-
+    private void initComponents() throws SQLException {
+        invitedListModel = new DefaultListModel();
+        roomListModel = new DefaultListModel();
         jPanel1 = new javax.swing.JPanel();
         WhenPanel = new javax.swing.JPanel();
         dateChooserCombo = new datechooser.beans.DateChooserCombo();
@@ -64,14 +71,14 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         writePlaceTextField = new javax.swing.JTextField();
         writePlaceLabel = new javax.swing.JLabel();
         choosePlaceScrollPane = new javax.swing.JScrollPane();
-        choosePlaceList = new javax.swing.JList();
+        choosePlaceList = new javax.swing.JList(roomListModel);
         choosePlaceLabel = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         plasserLabel = new javax.swing.JLabel();
         WhomPanel = new javax.swing.JPanel();
         addPersonButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        personList = new javax.swing.JList();
+        personList = new javax.swing.JList(invitedListModel);
         mailInviteTextField = new javax.swing.JTextField();
         mailInviteLabel = new javax.swing.JLabel();
         WhatPanel = new javax.swing.JPanel();
@@ -94,17 +101,29 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         DateLabel.setText("Dato:");
         DateLabel.setName("DateLabel"); // NOI18N
 
-        fromTextField.setText("00:00");
+        DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateChooserCombo.setDateFormat(dFormat);
+        Calendar cal = Calendar.getInstance();
+        cal.set(data.getAppointment(appointmentId).getStartTime().getYear(), data.getAppointment(appointmentId).getStartTime().getMonth(), data.getAppointment(appointmentId).getStartTime().getDate());
+        dateChooserCombo.setSelectedDate(cal);
+
+        fromTextField.setText(data.getAppointment(appointmentId).getStartTime().getHours() + "");
         fromTextField.setName("fromTextField"); // NOI18N
+        fromTextField.addActionListener(this);
+        startDate = dateChooserCombo.getText() + " " + fromTextField.getText() + ":00:00";
 
-        toTextField.setText("00:00");
+        toTextField.setText(data.getAppointment(appointmentId).getEndTime().getHours() +"");
         toTextField.setName("toTextField"); // NOI18N
+        toTextField.addActionListener(this);
+        endDate = dateChooserCombo.getText() + " " + toTextField.getText() + ":00:00";
 
-        durationTextField.setText("00:00");
+        durationTextField.setText((Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()))+"");
         durationTextField.setName("durationTextField"); // NOI18N
+        durationTextField.addActionListener(this);
 
         okButton.setText("Se ledige rom");
         okButton.setName("okButton"); // NOI18N
+        okButton.addActionListener(this);
 
         fromLabel.setText("Fra:");
         fromLabel.setName("fromLabel"); // NOI18N
@@ -192,15 +211,22 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         writePlaceLabel.setText("Skriv inn møtested:");
         writePlaceLabel.setName("writePlaceLabel"); // NOI18N
 
-        choosePlaceScrollPane.setName("choosePlaceScrollPane"); // NOI18N
-
-        choosePlaceList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+        for (int i = 1; i < data.getNumberOfPlaces(); i++)
+        {
+            if (data.locationIsAvailable(data.getLocationName(i), Timestamp.valueOf(startDate), Timestamp.valueOf(endDate)))
+            {
+                roomListModel.addElement(data.getLocation(data.getLocationName(i)).getName());
+            }
+        }
         choosePlaceList.setName("choosePlaceList"); // NOI18N
         choosePlaceScrollPane.setViewportView(choosePlaceList);
+
+        choosePlaceLabel.setText("eller velg ledig møterom:");
+        choosePlaceLabel.setName("choosePlaceLabel"); // NOI18N
+
+        choosePlaceList.setName("choosePlaceList"); // NOI18N
+        choosePlaceScrollPane.setViewportView(choosePlaceList);
+        choosePlaceList.setSelectedValue(data.getAppointment(appointmentId).getLocation(), true);
 
         choosePlaceLabel.setText("eller velg rom med");
         choosePlaceLabel.setName("choosePlaceLabel"); // NOI18N
@@ -430,6 +456,84 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         else if (evt.getSource() == deleteButton) {
             EditAppointmentUI.this.deleteButtonActionPerformed(evt);
         }
+        else if (evt.getSource() == fromTextField)
+        {
+            if (Integer.parseInt(fromTextField.getText())>Integer.parseInt(toTextField.getText()))
+            {
+                toTextField.setText((Integer.parseInt(fromTextField.getText())+1)+"");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            else
+            {
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            if (Integer.parseInt(fromTextField.getText()) > 23)
+            {
+                fromTextField.setText("23");
+                toTextField.setText("24");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            startDate = dateChooserCombo.getText() + " " + fromTextField.getText() + ":00:00";
+            endDate = dateChooserCombo.getText() + " " + toTextField.getText() + ":00:00";
+
+        }
+        else if (evt.getSource() == toTextField)
+        {
+            if (Integer.parseInt(fromTextField.getText())>Integer.parseInt(toTextField.getText()))
+            {
+                fromTextField.setText((Integer.parseInt(toTextField.getText())-1)+"");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+
+            else
+            {
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            if (Integer.parseInt(toTextField.getText()) > 24)
+            {
+                toTextField.setText("24");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            startDate = dateChooserCombo.getText() + " " + fromTextField.getText() + ":00:00";
+            endDate = dateChooserCombo.getText() + " " + toTextField.getText() + ":00:00";
+        }
+
+        else if (evt.getSource() == durationTextField)
+        {
+
+            if (Integer.parseInt(durationTextField.getText()) > 23)
+            {
+                toTextField.setText("24");
+                durationTextField.setText(Integer.parseInt(toTextField.getText()) - Integer.parseInt(fromTextField.getText()) +"");
+            }
+            else
+            {
+                toTextField.setText(Integer.parseInt(fromTextField.getText()) + Integer.parseInt(durationTextField.getText()) +"");
+            }
+            startDate = dateChooserCombo.getText() + " " + fromTextField.getText() + ":00:00";
+            endDate = dateChooserCombo.getText() + " " + toTextField.getText() + ":00:00";
+
+        }
+        else if (evt.getSource() == okButton)
+        {
+            System.out.println(startDate);
+            System.out.println(endDate);
+            try {
+                for (int i = 1; i <= data.getNumberOfPlaces(); i++)
+                {
+                    if (!data.locationIsAvailable(data.getLocationName(i),Timestamp.valueOf(startDate), Timestamp.valueOf(endDate)))
+                    {
+                        roomListModel.removeElement(data.getLocationName(i));
+                    }
+                    if (data.locationIsAvailable(data.getLocationName(i),Timestamp.valueOf(startDate), Timestamp.valueOf(endDate)) && !roomListModel.contains(data.getLocationName(i)))
+                    {
+                        roomListModel.addElement(data.getLocationName(i));
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
     }// </editor-fold>//GEN-END:initComponents
 
     private void SaveButtonActionPerformed(ActionEvent evt) {
@@ -490,7 +594,8 @@ public class EditAppointmentUI extends javax.swing.JFrame implements ActionListe
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new EditAppointmentUI(userID, data).setVisible(true);
+                    //new EditAppointmentUI(userID, data, appointmentId).setVisible(true);
+                    new EditAppointmentUI(1, new DatabaseHandler(), 1).setVisible(true);
                 } catch (SQLException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
